@@ -2,7 +2,7 @@
 
 ## 🇫🇷 Français
 
-© 2026 Romain / AI-GMENTED. **Tous droits réservés.**
+© 2026 Romain Nicod / AI-gmented.pm. **Tous droits réservés.**
 
 Ce dépôt n'est pas open source. Les skills, la méthode d'apprentissage et les livrables générés (fiches recap, flashcards) sont la propriété intellectuelle de leur auteur.
 
@@ -14,7 +14,7 @@ Les contenus de cours Le Wagon (énoncés de challenges, notions des Lectures) r
 
 ## 🇬🇧 English
 
-© 2026 Romain / AI-GMENTED. **All rights reserved.**
+© 2026 Romain Nicod / AI-gmented.pm. **All rights reserved.**
 
 This repository is not open source. The skills, the learning method, and the generated deliverables (recap sheets, flashcards) are the intellectual property of their author.
 

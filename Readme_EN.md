@@ -107,7 +107,7 @@ These skills are **personalized**: they mention my first name and my known diffi
 
 ## Intellectual property
 
-This repo is **not open source**. The skills, the method, and the generated deliverables (recap sheets, flashcards) are the intellectual property of their author (Romain / AI-GMENTED). © 2026, all rights reserved.
+This repo is **not open source**. The skills, the method, and the generated deliverables (recap sheets, flashcards) are the intellectual property of their author (Romain Nicod / AI-gmented.pm). © 2026, all rights reserved.
 
 - ✅ **Personal and educational use allowed** for students: install the skills, adapt them to your own learning, revise with the content.
 - ❌ **Forbidden without prior written consent**: redistribution, derivative publication, commercial use.
