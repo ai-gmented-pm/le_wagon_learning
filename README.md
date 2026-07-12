@@ -4,3 +4,5 @@ AI-augmented autonomous learning backbone for Le Wagon's **AI Software Developme
 
 - 🇫🇷 **[Lire en français → Readme_FR.md](Readme_FR.md)**
 - 🇬🇧 **[Read in English → Readme_EN.md](Readme_EN.md)**
+
+© 2026 Romain / AI-GMENTED — Tous droits réservés · All rights reserved. Repo non open source : usage personnel et pédagogique autorisé, voir [LICENSE.md](LICENSE.md).

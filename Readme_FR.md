@@ -103,6 +103,17 @@ Ces skills sont **personnalisés** : ils mentionnent mon prénom et mes difficul
 - **Le rappel actif + la répétition espacée** (auto-tests, flashcards, cartes ratées réinjectées) sont les deux techniques de mémorisation les mieux documentées.
 - **Hors ligne et imprimable** : la révision ne dépend ni d'un compte, ni d'une connexion.
 
+---
+
+## Propriété intellectuelle
+
+Ce repo n'est **pas open source**. Les skills, la méthode et les livrables générés (fiches, flashcards) sont la propriété intellectuelle de leur auteur (Romain / AI-GMENTED). © 2026, tous droits réservés.
+
+- ✅ **Usage personnel et pédagogique autorisé** pour les étudiants : installer les skills, les adapter à son propre apprentissage, réviser avec le contenu.
+- ❌ **Interdits sans accord écrit préalable** : redistribution, publication dérivée, usage commercial.
+
+Les contenus de cours Le Wagon (énoncés, notions des Lectures) restent la propriété de Le Wagon.
+
 Bon bootcamp ! 🚀
 
 *Questions, suggestions : ouvrez une issue.*
