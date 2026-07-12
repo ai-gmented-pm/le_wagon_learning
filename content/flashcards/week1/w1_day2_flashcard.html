@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards — Strings, tri et dates</title>
+<style>
+  :root{--bg:#f4f5f7;--card:#fff;--accent:#B40A00;--ink:#1f2430;--muted:#6b7280;--code:#f6f8fa;--ok:#16a34a;--ko:#dc2626;
+        --coeur:#2563eb;--faible:#B40A00;--challenge:#b45309;--rappel:#7c3aed;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+  header{text-align:center;margin-bottom:8px}
+  header h1{font-size:20px;margin:0;color:var(--accent)}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .progress{width:100%;max-width:680px;height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:14px 0 6px}
+  .progress-bar{height:100%;background:var(--ok);width:0;transition:width .25s}
+  .counter{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center}
+  .counter b{color:var(--ink)}
+  .scene{width:100%;max-width:680px;perspective:1600px}
+  .card{position:relative;width:100%;min-height:380px;transform-style:preserve-3d;transition:transform .5s}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:28px;display:flex;flex-direction:column;overflow:auto}
+  .face .tag{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{border-radius:99px;padding:2px 9px;color:#fff;font-size:10px;letter-spacing:.4px}
+  .pill.coeur{background:var(--coeur)} .pill.faible{background:var(--faible)}
+  .pill.challenge{background:var(--challenge)} .pill.rappel{background:var(--rappel)}
+  .front .question{font-size:18px;font-weight:600;line-height:1.5}
+  .back{transform:rotateY(180deg)}
+  .back .content{font-size:15px;line-height:1.6}
+  textarea{width:100%;margin-top:auto;min-height:90px;border:1px solid #d1d5db;border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .guessed{margin-top:14px;background:var(--code);border-left:3px solid var(--muted);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+  .guessed b{color:var(--ink)}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.9em;font-family:SFMono-Regular,Consolas,monospace}
+  pre{background:#0d1117;color:#e6edf3;padding:14px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5}
+  pre code{background:none;padding:0;color:inherit}
+  .content p{margin:0 0 10px}
+  .why{font-size:13px;color:var(--muted);border-top:1px dashed #e5e7eb;padding-top:10px;margin-top:6px}
+  .selfeval{display:flex;gap:10px;margin-top:auto;padding-top:14px}
+  .controls{display:flex;gap:10px;margin-top:20px;width:100%;max-width:680px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;border:none;border-radius:9px;padding:11px 18px;cursor:pointer;font-weight:600;font-size:14px}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .btn-ok{background:var(--ok);color:#fff;flex:1}
+  .btn-ko{background:var(--ko);color:#fff;flex:1}
+  button:disabled{opacity:.4;cursor:default}
+  .recap{width:100%;max-width:680px;margin-top:26px;background:#fff;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px}
+  .recap h2{font-size:15px;margin:0 0 12px;color:var(--accent)}
+  .recap h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 0 8px}
+  .recap ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65}
+  .bars{display:flex;flex-direction:column;gap:6px;font-size:13px}
+  .bars div{display:flex;align-items:center;gap:8px}
+  .bars .b{height:8px;border-radius:99px}
+  #revoir{font-size:13.5px;line-height:1.6}
+  footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;max-width:680px}
+  kbd{background:#fff;border:1px solid #d1d5db;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:11px;font-family:inherit}
+</style>
+</head>
+<body>
+<header>
+  <h1>Flashcards — Strings, tri et dates</h1>
+  <p>Le Wagon · Batch 2319 · Semaine 1 · Jour 2 — mardi 7 juillet 2026</p>
+</header>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div class="counter" id="counter"></div>
+
+<div class="scene"><div class="card" id="card">
+  <div class="face front">
+    <div class="tag" id="tagFront"></div>
+    <div class="question" id="question"></div>
+    <textarea id="answer" placeholder="Écris ta réponse ici, puis alt + entrée pour retourner la carte…"></textarea>
+  </div>
+  <div class="face back">
+    <div class="tag">Réponse</div>
+    <div class="content" id="back"></div>
+    <div class="guessed" id="guessed"></div>
+    <div class="selfeval">
+      <button class="btn-ko" id="ko">✗ Did not know</button>
+      <button class="btn-ok" id="ok">✓ I knew it!</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="controls">
+  <button class="btn-ghost" id="prev">← Précédent</button>
+  <button class="btn-ghost" id="flip">Flip card</button>
+  <button class="btn-ghost" id="shuffle">Mélanger</button>
+  <button class="btn-primary" id="next">Suivant →</button>
+</div>
+
+<div class="recap">
+  <h2>Récapitulatif du set</h2>
+  <h3>Répartition réelle</h3>
+  <div class="bars" id="bars"></div>
+  <h3>Difficultés personnelles couvertes</h3>
+  <ul id="diffs"></ul>
+  <h3>À revoir demain (cartes « Did not know »)</h3>
+  <div id="revoir">Aucune carte marquée pour l'instant.</div>
+</div>
+
+<footer>
+  <kbd>←</kbd> <kbd>→</kbd> naviguer · <kbd>alt + ⏎</kbd> retourner · <kbd>S</kbd> mélanger · <kbd>1</kbd> did not know · <kbd>2</kbd> I knew it<br>
+  35 cartes · usage personnel · contenu © Le Wagon.
+</footer>
+
+<script>
+const DECK = [{"bloc": "coeur", "type": "Différence", "q": "<code>upcase</code> vs <code>capitalize</code> : que fait chacun ?", "a": "<pre><code>\"hello world\".upcase      # => \"HELLO WORLD\"  tout en capitales\n\"hello world\".capitalize  # => \"Hello world\"  1re lettre seulement</code></pre><div class=\"why\"><code>capitalize</code> met aussi le reste en minuscules.</div>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"HELLO\".capitalize</code> ?", "a": "<p><code>\"Hello\"</code> : première lettre en capitale, <strong>tout le reste forcé en minuscules</strong>.</p>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment mettre chaque mot d'une phrase en capitale initiale ?", "a": "<pre><code>\"le wagon rocks\".split.map(&amp;:capitalize).join(\" \")\n# => \"Le Wagon Rocks\"</code></pre><div class=\"why\"><code>split</code> découpe en mots, <code>map</code> transforme chaque mot, <code>join</code> recolle avec un espace.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment découper une chaîne en tableau de mots ?", "a": "<pre><code>\"le wagon\".split        # => [\"le\", \"wagon\"]  espace par defaut\n\"a,b,c\".split(\",\")      # => [\"a\", \"b\", \"c\"]  separateur explicite</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment recoller un tableau de chaînes en une seule chaîne ?", "a": "<pre><code>[\"le\", \"wagon\"].join(\" \")   # => \"le wagon\"\n[\"a\", \"b\"].join            # => \"ab\"  sans separateur</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment trier un tableau par ordre croissant ?", "a": "<pre><code>[3, 1, 2].sort          # => [1, 2, 3]  renvoie une COPIE triee</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment obtenir la date du jour en Ruby ?", "a": "<pre><code>require \"date\"          # obligatoire hors Rails\nDate.today              # => #&lt;Date: 2026-07-07&gt;</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>Date.today</code> vs <code>Date.new(2026, 7, 7)</code> ?", "a": "<p><code>Date.today</code> donne la date courante. <code>Date.new(annee, mois, jour)</code> construit une date arbitraire — <strong>dans cet ordre</strong>.</p>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment convertir une saisie clavier en entier ?", "a": "<pre><code>gets.chomp.to_i         # lit, retire le \\n, convertit en Integer</code></pre>"}, {"bloc": "coeur", "type": "Vocabulaire", "q": "À quoi sert <code>chomp</code> après <code>gets</code> ?", "a": "<p><code>gets</code> capture aussi le retour à la ligne tapé par l'utilisateur. <code>chomp</code> le supprime.</p><pre><code>gets        # => \"Romain\\n\"\ngets.chomp  # => \"Romain\"</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment connaître la longueur d'une chaîne ou d'un tableau ?", "a": "<pre><code>\"wagon\".length      # => 5\n[1, 2, 3].size      # => 3   length et size sont synonymes</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment définir une méthode qui pose une question et renvoie la réponse ?", "a": "<pre><code>def ask(question)\n  puts question       # affiche la question a l'utilisateur\n  gets.chomp          # derniere expression : la reponse est renvoyee\nend</code></pre>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "Tu répètes trois fois <code>puts …</code> + <code>gets.chomp.to_i</code>. Que fais-tu ?", "a": "<p>Tu factorises dans une méthode paramétrée.</p><pre><code>def ask_birth_info(unit)\n  puts \"Ton #{unit} de naissance ?\"   # unit varie : jour, mois, annee\n  gets.chomp.to_i\nend\nday   = ask_birth_info(\"jour\")\nmonth = ask_birth_info(\"mois\")</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "Où chercher une méthode inconnue dans la doc Ruby ?", "a": "<p>Dans la classe de l'objet (<code>Array</code>, <code>String</code>, <code>Date</code>), liste alphabétique des méthodes d'instance.</p><div class=\"why\">Chercher « random ascending sort » ne donne rien : les noms Ruby sont courts et sans adjectif. Cherche <code>sort</code> sous la lettre S.</div>"}, {"bloc": "faible", "type": "Différence", "q": "<code>sort</code> vs <code>sort!</code> : lequel modifie le tableau d'origine ?", "a": "<pre><code>a = [3, 1]\na.sort    # => [1, 3]   a vaut toujours [3, 1]  (copie)\na.sort!   # => [1, 3]   a vaut maintenant [1, 3] (mutation)</code></pre><div class=\"why\">Le <code>!</code> signale une méthode destructive. Si l'énoncé dit « renvoie une copie triée sans modifier l'original », c'est <code>sort</code>.</div>"}, {"bloc": "faible", "type": "Débogage", "q": "<code>NoMethodError: undefined method 'titleize'</code>. Pourquoi ?", "a": "<p><code>titleize</code> n'existe pas en <strong>Ruby core</strong> : c'est une méthode Rails (ActiveSupport). Ton environnement est du Ruby pur.</p><pre><code>\"le wagon\".split.map(&amp;:capitalize).join(\" \")   # TO BE : l'equivalent en Ruby</code></pre>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que renvoie <code>Date.today - Date.new(1990, 1, 1)</code> ?", "a": "<p>Un <code>Rational</code>, pas un entier.</p><pre><code>(Date.today - Date.new(1990,1,1))        # => (13337/1)\n(Date.today - Date.new(1990,1,1)).to_i   # => 13337  <- ce que le test attend</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi ce calcul plante-t-il ?<pre><code>birth = Date.new(1990, 1, 1).to_s\nDate.today - birth</code></pre>", "a": "<p><code>.to_s</code> transforme la date en <strong>String</strong> : on ne peut plus soustraire une chaîne à une date.</p><pre><code>birth = Date.new(1990, 1, 1)   # TO BE : garder l'objet Date\n(Date.today - birth).to_i</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "<code>NameError: undefined local variable or method 'birth_year'</code> dans <code>interface.rb</code>. Diagnostic ?", "a": "<p>Le nom utilisé à l'appel ne correspond à aucune variable définie. Vérifie que la variable que tu passes porte bien le nom que tu as déclaré plus haut.</p><pre><code>year = gets.chomp.to_i\nage_in_days(day, month, birth_year)   # AS IS : birth_year n'existe pas\nage_in_days(day, month, year)         # TO BE</code></pre>"}, {"bloc": "faible", "type": "Différence", "q": "Le nom du paramètre dans la méthode doit-il être identique au nom de la variable à l'appel ?", "a": "<p>Non, aucun rapport. Le paramètre est une variable <strong>locale à la méthode</strong>, remplie par la valeur passée, quel que soit son nom à l'extérieur.</p>"}, {"bloc": "faible", "type": "Différence", "q": "<code>puts</code> vs <code>return</code> dans <code>age_in_days</code> : lequel fait passer le test ?", "a": "<p><code>return</code> (ou le retour implicite). RSpec compare une <strong>valeur</strong>, pas ce qui s'affiche à l'écran.</p>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que vaut <code>x</code> après <code>x = \"5\".to_i + 1</code> ?", "a": "<p><code>6</code>. Sans <code>.to_i</code>, <code>\"5\" + 1</code> lèverait <code>TypeError: no implicit conversion of Integer into String</code>.</p>"}, {"bloc": "faible", "type": "Choix idiomatique", "q": "Où placer le <code>puts</code> : dans la méthode de calcul, ou dans l'interface ?", "a": "<p>Dans l'<strong>interface</strong>. La méthode calcule et renvoie, l'interface affiche.</p><pre><code>puts age_in_days(1, 1, 1990)   # calcul et affichage separes</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Corrige :<pre><code>def sorted(an_array)\n  return an_array.\nend</code></pre>", "a": "<p>Appel de méthode inachevé après le point.</p><pre><code>def sorted(an_array)\n  an_array.sort        # TO BE : sort, sans bang, pour renvoyer une copie\nend</code></pre>"}, {"bloc": "faible", "type": "Différence", "q": "« Majuscule » vs « capitale » : qu'est-ce que <code>upcase</code> manipule ?", "a": "<p><code>upcase</code> agit sur la <strong>forme</strong> (la capitale typographique). Il n'a aucune conscience grammaticale : il ne sait pas qu'un nom propre prend une majuscule.</p>"}, {"bloc": "challenge", "type": "Production de code", "q": "Écris <code>age_in_days(day, month, year)</code> renvoyant un entier.", "a": "<pre><code>require \"date\"\n\ndef age_in_days(day, month, year)\n  birth_date = Date.new(year, month, day)   # attention a l'ordre : annee, mois, jour\n  (Date.today - birth_date).to_i            # Rational -> Integer\nend</code></pre>"}, {"bloc": "challenge", "type": "Débogage", "q": "Ton fichier plante sur <code>uninitialized constant Date</code>. Que manque-t-il ?", "a": "<pre><code>require \"date\"   # en tete de fichier, hors Rails c'est obligatoire</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Dans l'interface, comment collecter jour, mois et année sans répéter trois blocs identiques ?", "a": "<pre><code>def ask_birth_info(unit)\n  puts \"Quel est ton #{unit} de naissance ?\"\n  gets.chomp.to_i\nend\n\nday   = ask_birth_info(\"jour\")\nmonth = ask_birth_info(\"mois\")\nyear  = ask_birth_info(\"annee\")\nputs age_in_days(day, month, year)</code></pre>"}, {"bloc": "challenge", "type": "Traduction intention → code", "q": "Même factorisation, mais pour un prénom (pas un nombre). Que changes-tu ?", "a": "<pre><code>def ask(question)\n  puts question\n  gets.chomp        # PAS de .to_i : on veut la String telle quelle\nend</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Écris une méthode qui renvoie une copie triée d'un tableau, sans toucher à l'original.", "a": "<pre><code>def wagon_sort(an_array)\n  an_array.sort     # copie triee, l'original reste intact\nend</code></pre>"}, {"bloc": "challenge", "type": "Prédiction de sortie", "q": "Que renvoie <code>[\"banane\", \"Abricot\"].sort</code> ?", "a": "<p><code>[\"Abricot\", \"banane\"]</code> : le tri est basé sur les codes ASCII, et les capitales passent avant les minuscules.</p>"}, {"bloc": "challenge", "type": "Choix idiomatique", "q": "Comment trier en ignorant la casse ?", "a": "<pre><code>[\"banane\", \"Abricot\"].sort_by { |mot| mot.downcase }\n# => [\"Abricot\", \"banane\"]</code></pre>"}, {"bloc": "rappel", "type": "Différence", "q": "Rappel J1 — <code>=</code> vs <code>==</code> ?", "a": "<p><code>=</code> affecte, <code>==</code> compare. <code>if x = 5</code> écrase <code>x</code> et la condition est toujours vraie.</p>"}, {"bloc": "rappel", "type": "Prédiction de sortie", "q": "Rappel J1 — que renvoie une méthode dont le corps se termine par <code>puts \"ok\"</code> ?", "a": "<p><code>nil</code>. <code>puts</code> renvoie toujours <code>nil</code>.</p>"}, {"bloc": "rappel", "type": "Production de code", "q": "Rappel J1 — comment sortir immédiatement d'une méthode sur un cas particulier ?", "a": "<pre><code>return 0 if radius &lt; 0   # garde en debut de methode</code></pre>"}];
+const DIFFS = ["<code>sort</code> vs <code>sort!</code> : copie ou mutation", "<code>titleize</code> n'existe pas en Ruby core (c'est du Rails)", "<code>upcase</code> et <code>capitalize</code> inversés", "Soustraction de dates : renvoie un <code>Rational</code>, pas un <code>Integer</code>", "<code>NameError</code> : nom de variable qui ne correspond pas à celui du paramètre"];
+const LABELS = {coeur:"Cœur du cours",faible:"Point faible",challenge:"Challenge du jour",rappel:"Rappel espacé"};
+
+let order = DECK.map((_,i)=>i), pos = 0, flipped = false;
+const mastered = new Set(), missed = new Set(), guesses = {};
+const $ = id => document.getElementById(id);
+
+function render(){
+  const i = order[pos], c = DECK[i];
+  $('tagFront').innerHTML = '<span class="pill '+c.bloc+'">'+LABELS[c.bloc]+'</span><span>'+c.type+'</span>';
+  $('question').innerHTML = c.q;
+  $('back').innerHTML = c.a;
+  $('answer').value = guesses[i] || '';
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+  flipped = false; $('card').classList.remove('flipped');
+  $('counter').innerHTML = 'Carte <b>'+(pos+1)+'</b> / '+DECK.length+' · maîtrisées : <b>'+mastered.size+'</b> / '+DECK.length;
+  $('bar').style.width = (mastered.size/DECK.length*100)+'%';
+  $('prev').disabled = pos===0;
+  $('next').disabled = pos===DECK.length-1;
+}
+function flip(){
+  const i = order[pos];
+  if(!flipped) guesses[i] = $('answer').value;
+  flipped = !flipped;
+  $('card').classList.toggle('flipped', flipped);
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+}
+function go(d){ const n = pos+d; if(n<0||n>=DECK.length) return; pos = n; render(); }
+function evaluate(knew){
+  const i = order[pos];
+  if(knew){ mastered.add(i); missed.delete(i); } else { missed.add(i); mastered.delete(i); }
+  renderRevoir();
+  if(pos < DECK.length-1) go(1); else render();
+}
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+function renderBars(){
+  const counts = {};
+  DECK.forEach(c => counts[c.bloc] = (counts[c.bloc]||0)+1);
+  $('bars').innerHTML = Object.keys(LABELS).filter(k=>counts[k]).map(k=>{
+    const n = counts[k], pct = Math.round(n/DECK.length*100);
+    return '<div><span class="b" style="width:'+(pct*2)+'px;background:var(--'+k+')"></span>'+
+           '<span>'+LABELS[k]+' — <b>'+n+'</b> cartes ('+pct+'%)</span></div>';
+  }).join('');
+  $('diffs').innerHTML = DIFFS.map(d => '<li>'+d+'</li>').join('');
+}
+function renderRevoir(){
+  const list = [...missed];
+  $('revoir').innerHTML = list.length
+    ? '<p>Colle cette liste à Claude demain pour le rappel espacé :</p><pre><code>'+
+      list.map(i => '- ' + DECK[i].q.replace(/<[^>]+>/g,'')).join('\n') + '</code></pre>'
+    : 'Aucune carte marquée pour l\'instant.';
+}
+$('flip').addEventListener('click', flip);
+$('next').addEventListener('click', ()=>go(1));
+$('prev').addEventListener('click', ()=>go(-1));
+$('shuffle').addEventListener('click', shuffle);
+$('ok').addEventListener('click', ()=>evaluate(true));
+$('ko').addEventListener('click', ()=>evaluate(false));
+document.addEventListener('keydown', e=>{
+  if(e.altKey && e.key==='Enter'){ e.preventDefault(); flip(); return; }
+  if(document.activeElement === $('answer')) return;
+  if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if(e.key.toLowerCase()==='s') shuffle();
+  else if(flipped && e.key==='1') evaluate(false);
+  else if(flipped && e.key==='2') evaluate(true);
+});
+renderBars(); render(); renderRevoir();
+</script>
+</body>
+</html>

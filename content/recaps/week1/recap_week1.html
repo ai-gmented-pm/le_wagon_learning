@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap semaine - Le Wagon - Semaine 1</title>
+<style>
+  :root{
+    --paper:#fdfcf7;--ink:#1f2430;--muted:#6b7280;--line:#e7e3d6;
+    --accent:#c0562b;--spine:#8a3c1d;--concept:#2563a8;--trap:#b3341f;
+    --pattern:#2f7d54;--voc:#7a5cc0;--quiz:#a8781f;--code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5;}
+  .fiche{max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(var(--paper),var(--paper) 30px,#f5f2e8 31px);}
+  header{border-bottom:3px double var(--accent);padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 12px;
+    padding-left:12px;border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;border-left:4px solid var(--spine);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;border:1px solid #f0d9d3;
+    border-radius:6px;padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);padding-top:10px;color:var(--muted);
+    font-size:12px;font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon &middot; Camp 2319 &middot; Synthèse hebdo</div>
+    <h1>Recap de la semaine — Semaine 1</h1>
+    <div class="meta">Du lundi 6 au vendredi 10 juillet 2026 · Ruby fundamentals : méthodes, conditionnels, boucles, itérateurs &amp; blocs, Hashes.</div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Mes sticking points RÉCURRENTS (priorité absolue du week-end)</h2>
+
+    <p style="margin-top:0;color:#6b7280;font-size:14px">Classés par nombre de jours où ils sont revenus. Ce sont eux, et pas les concepts nouveaux, qui doivent occuper la révision.</p>
+
+    <div class="qa">
+      <div class="q">🥇 <code>puts</code> vs <code>return</code> <span style="font-weight:400">(revenu lundi, mercredi, vendredi)</span></div>
+      <div class="a"><code>puts</code> parle à l'humain et renvoie <code>nil</code>. <code>return</code> parle au programme et transmet une valeur. Un test RSpec appelle la méthode et lit sa VALEUR DE RETOUR : il ne regarde jamais l'écran. Corollaire vu vendredi : en Ruby, <code>return</code> explicite est souvent inutile, la dernière expression évaluée est renvoyée automatiquement.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">🥈 Valeur de retour des itérateurs <span style="font-weight:400">(jeudi, vendredi)</span></div>
+      <div class="a"><code>each</code> et <code>each_with_index</code> renvoient le tableau de DÉPART : ils ne collectent rien. Pour récupérer une transformation, il faut <code>map</code>, ou un accumulateur déclaré avant la boucle et renvoyé après. C'est LA question à se poser avant de choisir un itérateur : « qu'est-ce qu'il me rend ? ».</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">🥉 Portée des variables et confusion des noms <span style="font-weight:400">(mardi, jeudi, vendredi)</span></div>
+      <div class="a">Trois manifestations d'une même racine. (1) <code>NameError</code> dans <code>interface.rb</code> : le nom saisi ne correspondait pas au nom du paramètre. (2) Itérer sur le NOM DE LA MÉTHODE (<code>sorted_pairs.each_slice</code>) au lieu du PARAMÈTRE (<code>an_array.each_slice</code>). (3) Vouloir lire <code>next_week_date</code> hors de la méthode. Réflexe unique à installer : <strong>sur quel OBJET est-ce que j'agis, et existe-t-il ICI ?</strong></div>
+    </div>
+
+    <div class="qa">
+      <div class="q">Copie vs mutation <span style="font-weight:400">(mardi)</span></div>
+      <div class="a">Le <code>!</code> signale une modification de l'original : <code>sort!</code> abîme le tableau d'entrée, <code>sort</code> renvoie une copie triée. Décider lequel utiliser, c'est décider si on a le droit de détruire la donnée reçue.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q"><code>=</code> vs <code>==</code> <span style="font-weight:400">(mercredi)</span></div>
+      <div class="a">Un seul <code>=</code> AFFECTE et rend la valeur affectée (donc <code>if age = 18</code> est toujours vrai). Deux <code>==</code> COMPARENT et rendent un booléen. C'est un piège silencieux : il ne produit aucune erreur, juste un comportement faux.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">Ruby core n'est pas Rails <span style="font-weight:400">(mardi)</span></div>
+      <div class="a"><code>titleize</code> n'existe pas en Ruby seul (<code>NoMethodError</code>). En Ruby core : <code>split.map(&amp;:capitalize).join(" ")</code>. Face à un <code>NoMethodError</code> sur une méthode « qui existe pourtant », première hypothèse : elle vient d'une bibliothèque que je n'ai pas.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Le fil rouge de la semaine</h2>
+
+    <div class="card">
+      <b>Lundi : la méthode rend une VALEUR</b>
+      <div class="why"><code>circle_area</code>, <code>Math::PI</code>, conditionnel garde-fou. Côté outillage : fork ≠ clone, <code>origin</code> vs <code>upstream</code>, chemins relatifs et absolus.</div>
+    </div>
+    <div class="card">
+      <b>Mardi : le TYPE gouverne les opérations possibles</b>
+      <div class="why">Strings (<code>upcase</code>, <code>capitalize</code>, <code>split</code>/<code>map</code>/<code>join</code>), <code>sort</code> vs <code>sort!</code>, Dates (<code>Rational</code>, <code>.to_i</code>). Et première factorisation : <code>ask_birth_info(unit)</code>.</div>
+    </div>
+    <div class="card">
+      <b>Mercredi : l'ORDRE des branches décide de tout</b>
+      <div class="why"><code>coach_answer</code>, <code>include?</code> vs <code>==</code>, <code>elsif</code>, <code>else</code> sans condition. Puis boucles <code>for</code>/<code>while</code>, <code>Random.rand</code>, Ranges, et Black Jack en trois fichiers (une responsabilité par fichier).</div>
+    </div>
+    <div class="card">
+      <b>Jeudi : le BLOC dit à l'itérateur quoi faire</b>
+      <div class="why"><code>each_with_index</code>, <code>select</code>, <code>reject</code>, <code>find</code>, <code>map</code>, <code>reduce</code>, <code>each_slice</code>, <code>yield</code>. Le critère de choix n'est jamais « lequel je connais », c'est « lequel rend ce dont j'ai besoin ».</div>
+    </div>
+    <div class="card">
+      <b>Vendredi : nommer la donnée au lieu de la numéroter</b>
+      <div class="why">Hashes (<code>MENU</code>, <code>poor_calories_counter</code>), constantes en MAJUSCULES, clés uniques. Plus la division euclidienne (quotient/reste), la portée des variables locales, et le duck typing.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Les 5 erreurs à ne plus refaire</h2>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> le terminal affiche la bonne réponse, le test est rouge.</div>
+      <div><b>Cause :</b> <code>puts</code> au lieu de <code>return</code>.</div>
+      <div><b>Correctif :</b> avant d'écrire, se demander : « qui lit ce résultat ? Un humain ou le programme ? »</div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> une branche conditionnelle n'est jamais atteinte.</div>
+      <div><b>Cause :</b> un cas plus général la précède.</div>
+      <div><b>Correctif :</b> toujours ordonner du plus SPÉCIFIQUE au plus GÉNÉRAL.</div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> l'itérateur renvoie le tableau d'origine, non transformé.</div>
+      <div><b>Cause :</b> <code>each</code> ne collecte rien.</div>
+      <div><b>Correctif :</b> <code>map</code>, ou accumulateur déclaré AVANT et renvoyé APRÈS la boucle.</div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>NoMethodError</code> ou <code>NameError</code> sur un nom pourtant « écrit dans le fichier ».</div>
+      <div><b>Cause :</b> l'objet visé n'existe pas à cet endroit (nom de méthode confondu avec nom de paramètre, ou variable locale sortie de sa portée).</div>
+      <div><b>Correctif :</b> pointer du doigt l'objet réel sur lequel on agit, et vérifier qu'il est visible depuis la ligne où on est.</div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> un <code>if</code> inutile à l'intérieur d'un <code>select</code>.</div>
+      <div><b>Cause :</b> réflexe de raisonner en instruction plutôt qu'en expression booléenne.</div>
+      <div><b>Correctif :</b> le bloc d'un <code>select</code> ou d'un <code>reject</code> DOIT valoir <code>true</code> ou <code>false</code>, rien de plus.</div>
+    </div>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Carte des valeurs de retour (le tableau à savoir par cœur)</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>puts</code></td><td>Affiche</td><td><code>nil</code></td></tr>
+        <tr><td><code>each</code> / <code>each_with_index</code></td><td>Parcourt</td><td>Le receveur, INCHANGÉ</td></tr>
+        <tr><td><code>map</code></td><td>Transforme</td><td>Nouveau tableau, MÊME taille</td></tr>
+        <tr><td><code>select</code> / <code>reject</code></td><td>Filtre / élimine</td><td>Nouveau tableau, taille ≤</td></tr>
+        <tr><td><code>find</code></td><td>Cherche le premier match</td><td>UN élément, ou <code>nil</code></td></tr>
+        <tr><td><code>reduce(init)</code></td><td>Agrège</td><td>UNE valeur</td></tr>
+        <tr><td><code>each_slice(n)</code></td><td>Découpe en tranches</td><td><code>Enumerator</code> (chaînable)</td></tr>
+        <tr><td><code>sort</code></td><td>Trie sans toucher l'original</td><td>Nouveau tableau trié</td></tr>
+        <tr><td><code>sort!</code></td><td>Trie EN MODIFIANT l'original</td><td>Le même tableau, trié</td></tr>
+        <tr><td><code>hash[cle]</code></td><td>Lit une valeur par sa clé</td><td>La valeur, ou <code>nil</code></td></tr>
+        <tr><td><code>date1 - date2</code></td><td>Écart entre deux dates</td><td><code>Rational</code> (→ <code>.to_i</code>)</td></tr>
+        <tr><td><code>yield</code></td><td>Exécute le bloc reçu</td><td>La valeur du bloc</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test cumulatif <span style="font-weight:400;color:var(--muted);font-size:13px">(toute la semaine, réponds de mémoire)</span></h2>
+
+    <details>
+      <summary>Ma méthode affiche le bon résultat mais RSpec échoue. Première hypothèse ?</summary>
+      <div class="ans"><code>puts</code> au lieu de <code>return</code>. La méthode renvoie <code>nil</code>, RSpec lit la valeur de retour.</div>
+    </details>
+
+    <details>
+      <summary>Classe ces trois retours : <code>each</code>, <code>map</code>, <code>select</code>.</summary>
+      <div class="ans"><code>each</code> → le tableau de départ. <code>map</code> → nouveau tableau, même taille. <code>select</code> → nouveau tableau, taille inférieure ou égale.</div>
+    </details>
+
+    <details>
+      <summary>Pourquoi <code>if age = 18</code> est-il toujours vrai ?</summary>
+      <div class="ans">Un seul <code>=</code> affecte et rend 18, qui est truthy. Il fallait <code>==</code> ou <code>&gt;=</code>.</div>
+    </details>
+
+    <details>
+      <summary>Que renvoie <code>Date.today - Date.new(2000, 1, 1)</code>, et comment obtenir un entier ?</summary>
+      <div class="ans">Un <code>Rational</code>. Conversion avec <code>.to_i</code>.</div>
+    </details>
+
+    <details>
+      <summary>Différence structurelle entre un Array et un Hash ?</summary>
+      <div class="ans">L'Array adresse par POSITION entière imposée (0, 1, 2...). Le Hash adresse par CLÉ choisie. On numérote d'un côté, on nomme de l'autre.</div>
+    </details>
+
+    <details>
+      <summary>Écris <code>even_numbers</code> avec <code>select</code>, sans <code>if</code>.</summary>
+      <div class="ans"><code>an_array.select { |n| n.even? }</code>. Le bloc doit valoir directement <code>true</code> ou <code>false</code>.</div>
+    </details>
+
+    <details>
+      <summary>Où déclarer un accumulateur et pourquoi ?</summary>
+      <div class="ans">AVANT la boucle. Une variable créée dans le bloc meurt à sa fermeture : elle ne survit ni aux tours suivants, ni à l'après-boucle.</div>
+    </details>
+
+    <details>
+      <summary><code>"hello".count</code> et <code>[1,2,3].count</code> : même comportement ?</summary>
+      <div class="ans">Non. Sur un Array, <code>count</code> sans argument rend le nombre d'éléments. Sur une String, il EXIGE un argument (<code>ArgumentError</code> sinon). Pour la longueur d'une chaîne : <code>size</code> ou <code>length</code>.</div>
+    </details>
+
+    <details>
+      <summary>Un compteur qui grandit indéfiniment, un tableau de 4 éléments. Comment rester dans les index valides ?</summary>
+      <div class="ans"><code>tableau[compteur % 4]</code>. Le modulo ramène toujours dans 0..3.</div>
+    </details>
+
+    <details>
+      <summary>Peut-on passer une String à un paramètre nommé <code>number</code> ?</summary>
+      <div class="ans">Oui, Ruby ne vérifie aucun type à la définition (duck typing). L'erreur ne survient qu'à l'exécution, si l'objet ne sait pas répondre à l'opération.</div>
+    </details>
+  </section>
+
+  <footer>
+    Plan de révision du week-end, par ordre de rendement : <strong>(1)</strong> la carte des valeurs de retour ci-dessus, à réciter sans regarder. <strong>(2)</strong> Réécrire de mémoire <code>even_numbers</code>, <code>short_words</code>, <code>first_under</code>, <code>concatenate</code>. <strong>(3)</strong> Terminer <code>size_splitter</code> et <code>block_splitter</code>.<br>
+    À venir : symbols, <code>.key?</code>, <code>.keys</code>, <code>.values</code>, <code>.each</code> sur les Hashes, puis le module POO.
+  </footer>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap du jour - Le Wagon - 20260707</title>
+<style>
+  :root{
+    --paper:#fdfcf7;--ink:#1f2430;--muted:#6b7280;--line:#e7e3d6;
+    --accent:#c0562b;--spine:#8a3c1d;--concept:#2563a8;--trap:#b3341f;
+    --pattern:#2f7d54;--voc:#7a5cc0;--quiz:#a8781f;--code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5;}
+  .fiche{max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(var(--paper),var(--paper) 30px,#f5f2e8 31px);}
+  header{border-bottom:3px double var(--accent);padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 12px;
+    padding-left:12px;border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;border-left:4px solid var(--spine);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;border:1px solid #f0d9d3;
+    border-radius:6px;padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);padding-top:10px;color:var(--muted);
+    font-size:12px;font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon &middot; Camp 2319 &middot; Recap</div>
+    <h1>Recap du jour — Jour 2</h1>
+    <div class="meta">Mardi 7 juillet 2026 · Strings (upcase/capitalize), <code>sort</code> vs <code>sort!</code>, dates et <code>age_in_days</code>, première factorisation. <em>Cours non fourni : fiche bâtie sur la session.</em></div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Mes questions &amp; incompréhensions</h2>
+
+    <div class="qa">
+      <div class="q">« <code>upcase</code> et <code>capitalize</code>, lequel fait quoi ? » (je les avais inversés)</div>
+      <div class="a"><code>upcase</code> met TOUT en majuscules. <code>capitalize</code> ne touche que la première lettre et force le reste en minuscules. Le nom est trompeur : <em>capitalize</em> ne veut pas dire « tout en capitales », il veut dire « appliquer la capitale initiale ».</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Comment je mets une majuscule à chaque mot d'une phrase ? »</div>
+      <div class="a">Ruby n'a pas de méthode native pour ça. On compose : découper la phrase en mots, capitaliser chaque mot, recoller. Soit <code>"ma phrase".split.map(&amp;:capitalize).join(" ")</code>. <strong>Attention :</strong> <code>titleize</code> existe uniquement dans Rails (ActiveSupport). En Ruby seul, il provoque un <code>NoMethodError</code>, ce que j'ai constaté dans <code>pry</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Je cherche "random ascending sort" dans la doc Array 3.3.5 et je ne trouve rien. »</div>
+      <div class="a">La doc ne parle pas en intention, elle parle en nom de méthode. Ruby n'appelle pas ça « ascending » : la méthode s'appelle simplement <code>sort</code>, à chercher alphabétiquement à la lettre S. Réflexe à prendre : chercher le NOM probable, pas la DESCRIPTION du besoin.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>sort</code> ou <code>sort!</code> ? »</div>
+      <div class="a">Le <code>!</code> signale une mutation : <code>sort!</code> modifie le tableau d'origine et le renvoie. <code>sort</code> laisse l'original intact et renvoie une COPIE triée. Un exercice qui demande « renvoyer une copie triée sans modifier l'original » impose donc <code>sort</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Pourquoi ma soustraction de dates ne me donne pas un nombre de jours normal ? »</div>
+      <div class="a">Soustraire deux objets <code>Date</code> renvoie un <code>Rational</code> (une fraction exacte, du type <code>(9876/1)</code>), pas un <code>Integer</code>. Il faut convertir avec <code>.to_i</code>. Et surtout : ne jamais appliquer <code>.to_s</code> à une date avant de la soustraire, car deux chaînes de caractères ne se soustraient pas.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>NameError</code> dans <code>interface.rb</code> alors que la méthode marche. »</div>
+      <div class="a">Décalage de noms. La méthode définit ses paramètres <code>day, month, year</code>, mais dans l'interface j'avais saisi <code>birth_day, birth_month, birth_year</code>. Une variable locale n'existe que sous le nom sous lequel elle a été créée : Ruby cherche <code>day</code>, ne le trouve pas, et lève un <code>NameError</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Je répète trois fois <code>puts</code> + <code>gets.chomp.to_i</code>, c'est moche. »</div>
+      <div class="a">Oui, et c'est exactement le signal d'une factorisation : ce qui varie (le mot « jour », « mois », « année ») devient un paramètre, ce qui se répète devient le corps d'une méthode. D'où <code>ask_birth_info(unit)</code>, appelée trois fois avec trois valeurs différentes.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b>Le bang <code>!</code> : mutation contre copie</b>
+      <div class="why">Convention Ruby : la version avec <code>!</code> modifie l'objet receveur en place. Sans <code>!</code>, l'objet d'origine est préservé et on récupère un nouvel objet. Savoir lequel on veut, c'est savoir si on a le droit d'abîmer la donnée d'entrée.</div>
+    </div>
+    <div class="card">
+      <b>Ruby core ≠ Rails</b>
+      <div class="why">Une méthode vue dans un tutoriel en ligne peut venir d'ActiveSupport (la bibliothèque de Rails) et non de Ruby. <code>titleize</code> en est le cas typique. Si <code>NoMethodError</code> tombe sur une méthode « qui existe pourtant », la première hypothèse est : elle n'existe pas dans MON environnement.</div>
+    </div>
+    <div class="card">
+      <b>Le type gouverne les opérations possibles</b>
+      <div class="why">Une <code>Date</code> se soustrait, une <code>String</code> non. <code>.to_s</code> n'est pas anodin : il change la nature de l'objet, donc l'ensemble des opérations qu'il accepte. Convertir trop tôt, c'est se priver des opérations dont on a besoin.</div>
+    </div>
+    <div class="card">
+      <b>Factoriser : isoler ce qui varie</b>
+      <div class="why">Trois blocs identiques à un mot près, c'est une méthode avec un paramètre. La règle de reconnaissance : si je peux décrire les blocs par une phrase unique en remplaçant un mot par un trou, ce trou est mon paramètre.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>NoMethodError: undefined method 'titleize' for an instance of String</code></div>
+      <div><b>Cause :</b> <code>titleize</code> appartient à Rails (ActiveSupport), pas à Ruby core. Mon environnement est Ruby seul.</div>
+      <div><b>Correctif :</b> AS IS <code>"jean dupont".titleize</code> → TO BE <code>"jean dupont".split.map(&amp;:capitalize).join(" ")</code> <span class="cmt"># composition de méthodes natives</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>age_in_days</code> renvoie <code>(9876/1)</code> au lieu de <code>9876</code>.</div>
+      <div><b>Cause :</b> la soustraction de deux <code>Date</code> produit un <code>Rational</code>.</div>
+      <div><b>Correctif :</b> AS IS <code>Date.today - birth_date</code> → TO BE <code>(Date.today - birth_date).to_i</code> <span class="cmt"># on convertit la fraction en entier</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>NameError: undefined local variable or method 'day'</code></div>
+      <div><b>Cause :</b> le nom saisi dans l'interface (<code>birth_day</code>) ne correspond pas au nom attendu par l'appel (<code>day</code>).</div>
+      <div><b>Correctif :</b> aligner les noms, ou passer explicitement : <code>age_in_days(birth_day, birth_month, birth_year)</code> <span class="cmt"># l'ordre des arguments compte, pas leur nom</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> le tableau d'origine est modifié alors que l'énoncé demandait une copie.</div>
+      <div><b>Cause :</b> usage de <code>sort!</code> au lieu de <code>sort</code>.</div>
+      <div><b>Correctif :</b> AS IS <code>an_array.sort!</code> → TO BE <code>an_array.sort</code> <span class="cmt"># renvoie une copie triée, l'original reste intact</span></div>
+    </div>
+  </section>
+
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+
+    <pre><code>require "date"                          <span class="cmt"># charge la classe Date : indispensable en script autonome</span>
+
+def age_in_days(day, month, year)       <span class="cmt"># trois paramètres, dans CET ordre</span>
+  birth_date = Date.new(year, month, day) <span class="cmt"># attention : Date.new attend (année, mois, jour)</span>
+  today = Date.today                    <span class="cmt"># la date du jour, en objet Date</span>
+  (today - birth_date).to_i             <span class="cmt"># la soustraction rend un Rational, .to_i le convertit en entier</span>
+end                                     <span class="cmt"># retour implicite de la dernière expression</span></code></pre>
+
+    <pre><code>def ask_birth_info(unit)                <span class="cmt"># "unit" est ce qui varie : "jour", "mois" ou "année"</span>
+  puts "Quel est ton #{unit} de naissance ?" <span class="cmt"># interpolation : la valeur d'unit s'insère dans la phrase</span>
+  gets.chomp.to_i                       <span class="cmt"># gets lit la saisie, chomp retire le saut de ligne, to_i convertit en entier</span>
+end                                     <span class="cmt"># la méthode renvoie l'entier saisi</span>
+
+day = ask_birth_info("jour")            <span class="cmt"># un seul appel, réutilisé trois fois</span>
+month = ask_birth_info("mois")          <span class="cmt"># même code, argument différent</span>
+year = ask_birth_info("année")          <span class="cmt"># plus de duplication</span></code></pre>
+
+    <pre><code>"jean dupont".split                     <span class="cmt"># découpe sur les espaces => ["jean", "dupont"]</span>
+             .map(&amp;:capitalize)         <span class="cmt"># applique capitalize à chaque mot => ["Jean", "Dupont"]</span>
+             .join(" ")                 <span class="cmt"># recolle avec un espace => "Jean Dupont"</span></code></pre>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>upcase</code></td><td>Passe toute la chaîne en majuscules</td><td>Nouvelle <code>String</code></td></tr>
+        <tr><td><code>downcase</code></td><td>Passe toute la chaîne en minuscules</td><td>Nouvelle <code>String</code></td></tr>
+        <tr><td><code>capitalize</code></td><td>Première lettre en majuscule, le reste en minuscules</td><td>Nouvelle <code>String</code></td></tr>
+        <tr><td><code>split</code></td><td>Découpe une chaîne (sur les espaces par défaut)</td><td><code>Array</code> de <code>String</code></td></tr>
+        <tr><td><code>join(" ")</code></td><td>Recolle un tableau en une chaîne, avec un séparateur</td><td><code>String</code></td></tr>
+        <tr><td><code>sort</code></td><td>Trie sans toucher à l'original</td><td>Nouveau <code>Array</code> trié</td></tr>
+        <tr><td><code>sort!</code></td><td>Trie EN MODIFIANT l'original</td><td>Le même <code>Array</code>, trié</td></tr>
+        <tr><td><code>Date.today</code></td><td>Date du jour</td><td><code>Date</code></td></tr>
+        <tr><td><code>Date.new(y, m, d)</code></td><td>Construit une date (année, mois, jour)</td><td><code>Date</code></td></tr>
+        <tr><td><code>date1 - date2</code></td><td>Écart entre deux dates</td><td><code>Rational</code> (à convertir avec <code>.to_i</code>)</td></tr>
+        <tr><td><code>gets.chomp</code></td><td>Lit la saisie clavier et retire le saut de ligne</td><td><code>String</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+
+    <details>
+      <summary>Que renvoie <code>"BONJOUR le monde".capitalize</code> ?</summary>
+      <div class="ans"><code>"Bonjour le monde"</code>. <code>capitalize</code> force la première lettre en majuscule ET le reste en minuscules.</div>
+    </details>
+
+    <details>
+      <summary>Pourquoi <code>"jean dupont".titleize</code> plante-t-il ?</summary>
+      <div class="ans">Parce que <code>titleize</code> vient de Rails (ActiveSupport), pas de Ruby core. En Ruby seul : <code>split.map(&amp;:capitalize).join(" ")</code>.</div>
+    </details>
+
+    <details>
+      <summary>Quelle est la classe du résultat de <code>Date.today - Date.new(1990, 1, 1)</code> ?</summary>
+      <div class="ans"><code>Rational</code>. Il faut <code>.to_i</code> pour obtenir un <code>Integer</code>.</div>
+    </details>
+
+    <details>
+      <summary>Mon exercice dit : « renvoie une copie triée sans modifier le tableau d'origine ». <code>sort</code> ou <code>sort!</code> ?</summary>
+      <div class="ans"><code>sort</code>. Le <code>!</code> signale une mutation de l'original.</div>
+    </details>
+
+    <details>
+      <summary>Que fait <code>.chomp</code> dans <code>gets.chomp</code> ?</summary>
+      <div class="ans">Il retire le saut de ligne final produit par la touche Entrée. Sans lui, la chaîne saisie contient un <code>\n</code> parasite.</div>
+    </details>
+  </section>
+
+  <footer>Priorité de révision : <code>sort</code> vs <code>sort!</code>, et le réflexe « je cherche le NOM de la méthode dans la doc, pas la description de mon besoin ». Rappel : <code>titleize</code> n'existe pas en Ruby core.</footer>
+
+
+</div>
+</body>
+</html>

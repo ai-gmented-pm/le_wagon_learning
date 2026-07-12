@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards — Conditionnels, boucles & Black Jack</title>
+<style>
+  :root{--bg:#f4f5f7;--card:#fff;--accent:#B40A00;--ink:#1f2430;--muted:#6b7280;--code:#f6f8fa;--ok:#16a34a;--ko:#dc2626;
+        --coeur:#2563eb;--faible:#B40A00;--challenge:#b45309;--rappel:#7c3aed;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+  header{text-align:center;margin-bottom:8px}
+  header h1{font-size:20px;margin:0;color:var(--accent)}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .progress{width:100%;max-width:680px;height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:14px 0 6px}
+  .progress-bar{height:100%;background:var(--ok);width:0;transition:width .25s}
+  .counter{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center}
+  .counter b{color:var(--ink)}
+  .scene{width:100%;max-width:680px;perspective:1600px}
+  .card{position:relative;width:100%;min-height:380px;transform-style:preserve-3d;transition:transform .5s}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:28px;display:flex;flex-direction:column;overflow:auto}
+  .face .tag{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{border-radius:99px;padding:2px 9px;color:#fff;font-size:10px;letter-spacing:.4px}
+  .pill.coeur{background:var(--coeur)} .pill.faible{background:var(--faible)}
+  .pill.challenge{background:var(--challenge)} .pill.rappel{background:var(--rappel)}
+  .front .question{font-size:18px;font-weight:600;line-height:1.5}
+  .back{transform:rotateY(180deg)}
+  .back .content{font-size:15px;line-height:1.6}
+  textarea{width:100%;margin-top:auto;min-height:90px;border:1px solid #d1d5db;border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .guessed{margin-top:14px;background:var(--code);border-left:3px solid var(--muted);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+  .guessed b{color:var(--ink)}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.9em;font-family:SFMono-Regular,Consolas,monospace}
+  pre{background:#0d1117;color:#e6edf3;padding:14px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5}
+  pre code{background:none;padding:0;color:inherit}
+  .content p{margin:0 0 10px}
+  .why{font-size:13px;color:var(--muted);border-top:1px dashed #e5e7eb;padding-top:10px;margin-top:6px}
+  .selfeval{display:flex;gap:10px;margin-top:auto;padding-top:14px}
+  .controls{display:flex;gap:10px;margin-top:20px;width:100%;max-width:680px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;border:none;border-radius:9px;padding:11px 18px;cursor:pointer;font-weight:600;font-size:14px}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .btn-ok{background:var(--ok);color:#fff;flex:1}
+  .btn-ko{background:var(--ko);color:#fff;flex:1}
+  button:disabled{opacity:.4;cursor:default}
+  .recap{width:100%;max-width:680px;margin-top:26px;background:#fff;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px}
+  .recap h2{font-size:15px;margin:0 0 12px;color:var(--accent)}
+  .recap h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 0 8px}
+  .recap ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65}
+  .bars{display:flex;flex-direction:column;gap:6px;font-size:13px}
+  .bars div{display:flex;align-items:center;gap:8px}
+  .bars .b{height:8px;border-radius:99px}
+  #revoir{font-size:13.5px;line-height:1.6}
+  footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;max-width:680px}
+  kbd{background:#fff;border:1px solid #d1d5db;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:11px;font-family:inherit}
+</style>
+</head>
+<body>
+<header>
+  <h1>Flashcards — Conditionnels, boucles & Black Jack</h1>
+  <p>Le Wagon · Batch 2319 · Semaine 1 · Jour 3 — mercredi 8 juillet 2026</p>
+</header>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div class="counter" id="counter"></div>
+
+<div class="scene"><div class="card" id="card">
+  <div class="face front">
+    <div class="tag" id="tagFront"></div>
+    <div class="question" id="question"></div>
+    <textarea id="answer" placeholder="Écris ta réponse ici, puis alt + entrée pour retourner la carte…"></textarea>
+  </div>
+  <div class="face back">
+    <div class="tag">Réponse</div>
+    <div class="content" id="back"></div>
+    <div class="guessed" id="guessed"></div>
+    <div class="selfeval">
+      <button class="btn-ko" id="ko">✗ Did not know</button>
+      <button class="btn-ok" id="ok">✓ I knew it!</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="controls">
+  <button class="btn-ghost" id="prev">← Précédent</button>
+  <button class="btn-ghost" id="flip">Flip card</button>
+  <button class="btn-ghost" id="shuffle">Mélanger</button>
+  <button class="btn-primary" id="next">Suivant →</button>
+</div>
+
+<div class="recap">
+  <h2>Récapitulatif du set</h2>
+  <h3>Répartition réelle</h3>
+  <div class="bars" id="bars"></div>
+  <h3>Difficultés personnelles couvertes</h3>
+  <ul id="diffs"></ul>
+  <h3>À revoir demain (cartes « Did not know »)</h3>
+  <div id="revoir">Aucune carte marquée pour l'instant.</div>
+</div>
+
+<footer>
+  <kbd>←</kbd> <kbd>→</kbd> naviguer · <kbd>alt + ⏎</kbd> retourner · <kbd>S</kbd> mélanger · <kbd>1</kbd> did not know · <kbd>2</kbd> I knew it<br>
+  35 cartes · usage personnel · contenu © Le Wagon.
+</footer>
+
+<script>
+const DECK = [{"bloc": "coeur", "type": "Production de code", "q": "Quelle est la structure complète d'une conditionnelle à trois branches ?", "a": "<pre><code>if condition_1\n  # cas 1\nelsif condition_2      # elsif, en un seul mot, sans e\n  # cas 2\nelse                   # else ne porte AUCUNE condition\n  # cas par defaut\nend</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>include?</code> vs <code>==</code> sur une String ?", "a": "<pre><code>\"Ça va ?\".include?(\"?\")   # => true   le ? est quelque part dedans\n\"Ça va ?\" == \"?\"          # => false  egalite stricte de toute la chaine</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment détecter qu'une chaîne est entièrement en capitales ?", "a": "<pre><code>message == message.upcase   # true si la chaine etait deja tout en capitales</code></pre>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "Comment nomme-t-on une méthode qui renvoie <code>true</code> ou <code>false</code> ?", "a": "<p>Avec un <code>?</code> final : <code>allowed_to_vote?</code>, <code>even?</code>, <code>include?</code>. C'est une convention Ruby, pas une règle du langage.</p>"}, {"bloc": "coeur", "type": "Production de code", "q": "Écris une boucle <code>while</code> qui compte de 1 à 5.", "a": "<pre><code>i = 1\nwhile i &lt;= 5           # tant que la condition est vraie\n  puts i\n  i += 1               # INDISPENSABLE, sinon boucle infinie\nend</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Écris une boucle <code>for</code> sur un intervalle de 1 à 10.", "a": "<pre><code>for i in 1..10         # 1..10 est un Range, bornes incluses\n  puts i\nend</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>1..5</code> vs <code>1...5</code> ?", "a": "<pre><code>(1..5).to_a    # => [1, 2, 3, 4, 5]   deux points : borne incluse\n(1...5).to_a   # => [1, 2, 3, 4]      trois points : borne exclue</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment tirer un nombre aléatoire entre 1 et 13 ?", "a": "<pre><code>rand(1..13)            # => un Integer entre 1 et 13 inclus\nRandom.rand(1..13)     # equivalent, forme explicite</code></pre>"}, {"bloc": "coeur", "type": "Traduction intention → code", "q": "Comment additionner tous les nombres d'un intervalle avec un accumulateur ?", "a": "<pre><code>total = 0              # l'accumulateur, initialise AVANT la boucle\nfor n in 1..10\n  total += n           # total = total + n\nend\ntotal                  # => 55</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment afficher un tableau proprement, séparé par des virgules ?", "a": "<pre><code>puts [1, 3, 2].sort.join(\", \")   # => 1, 2, 3</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment lire une ligne saisie par l'utilisateur et la découper en mots ?", "a": "<pre><code>numbers = gets.chomp.split        # =&gt; [\"3\", \"1\", \"2\"] : des Strings !\nnumbers.map(&amp;:to_i).sort         # =&gt; [1, 2, 3]</code></pre>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Que vaut <code>\"3\" &gt; \"12\"</code> ?", "a": "<p><code>true</code> — la comparaison est <strong>lexicographique</strong> sur des Strings. <code>\"3\"</code> vient après <code>\"1\"</code>. D'où l'importance du <code>.to_i</code>.</p>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "RuboCop râle sur <code>if(age&gt;=18)</code>. Que corriger ?", "a": "<pre><code>if age &gt;= 18           # pas de parentheses, espaces autour de l'operateur\nend</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment renvoyer directement un booléen sans <code>if</code> ?", "a": "<pre><code>def allowed_to_vote?(age)\n  age &gt;= 18            # l'expression EST deja true ou false\nend</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi la phrase magique n'est-elle jamais reconnue ?<pre><code>if message.include?(\"?\")\n  \"Silly question, get dressed and go to work!\"\nelsif message == \"I am going to work!\"\n  \"Good.\"\nend</code></pre>", "a": "<p>Mauvais <strong>ordre des branches</strong>. Une question contenant la phrase magique tomberait dans la première branche. Ici le vrai piège : le cas particulier doit être testé <strong>en premier</strong>.</p><pre><code>if message == \"I am going to work!\"   # TO BE : le cas exact d'abord\n  \"Good.\"\nelsif message.include?(\"?\")\n  \"Silly question, get dressed and go to work!\"\nelse\n  \"I don't care, get dressed and go to work!\"\nend</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "<code>syntax error, unexpected 'elseif'</code>. Corrige.", "a": "<pre><code>elsif condition        # TO BE : elsif, un seul mot, sans le e de else</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Corrige :<pre><code>def coach_answer(message)\n  message = gets.chomp\n  ...\nend</code></pre>", "a": "<p>Le <code>gets.chomp</code> <strong>écrase</strong> l'argument reçu. La méthode reçoit déjà son message : la saisie se fait dans l'interface.</p><pre><code>def coach_answer(message)\n  # message est deja rempli par l'appelant, on ne lit rien ici\nend</code></pre>"}, {"bloc": "faible", "type": "Différence", "q": "<code>puts</code> vs <code>return</code> dans <code>coach_answer</code> : lequel fait passer RSpec ?", "a": "<p><code>return</code> (ou le retour implicite). RSpec compare la <strong>valeur renvoyée</strong> à la chaîne attendue. Un <code>puts</code> renvoie <code>nil</code> → test rouge malgré un affichage correct.</p>"}, {"bloc": "faible", "type": "Débogage", "q": "<code>if message = \"stop\"</code> : quel est le bug ?", "a": "<p><code>=</code> affecte au lieu de comparer. <code>message</code> devient <code>\"stop\"</code> et la condition est toujours vraie.</p><pre><code>if message == \"stop\"   # TO BE</code></pre>"}, {"bloc": "faible", "type": "Choix idiomatique", "q": "L'énoncé demande <code>coach_answer_enhanced</code> avec une règle en plus. Modifies-tu <code>coach_answer</code> ?", "a": "<p>Non. Tu écris une <strong>seconde méthode</strong>. La première passe déjà ses tests : la toucher, c'est risquer de la casser.</p><div class=\"why\">Ton réflexe du jour a été d'enrichir la méthode existante. Un test vert est un acquis à protéger.</div>"}, {"bloc": "faible", "type": "Traduction intention → code", "q": "Dans un <code>if/elsif/else</code>, la dernière branche a-t-elle besoin d'une condition ?", "a": "<p>Non. <code>else</code> attrape tout ce qui n'est tombé dans aucune branche précédente. Lui mettre une condition serait un <code>elsif</code>.</p>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"I AM GOING TO WORK!\".upcase == \"I AM GOING TO WORK!\"</code> ?", "a": "<p><code>true</code>. C'est exactement le test « le message est-il déjà tout en capitales ? »</p>"}, {"bloc": "faible", "type": "Débogage", "q": "Ta boucle <code>while</code> ne s'arrête jamais. Que vérifier en premier ?", "a": "<p>L'incrément. Sans <code>i += 1</code> dans le corps, la condition reste vraie indéfiniment.</p>"}, {"bloc": "faible", "type": "Différence", "q": "Une méthode doit-elle afficher, ou l'interface doit-elle afficher ?", "a": "<p>La méthode <strong>renvoie</strong>, l'interface <strong>affiche</strong>. C'est la séparation logique / présentation que Le Wagon impose dès la première semaine.</p><pre><code>puts coach_answer(message)   # dans interface.rb</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Ton interpolation affiche <code>#{name}</code> littéralement. Pourquoi ?", "a": "<p>Tu as utilisé des guillemets <strong>simples</strong>. L'interpolation ne fonctionne qu'entre guillemets doubles.</p><pre><code>puts \"Bonjour #{name}\"   # TO BE</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Écris <code>coach_answer(message)</code> en entier (3 règles).", "a": "<pre><code>def coach_answer(message)\n  if message == \"I am going to work!\"          # cas exact en premier\n    \"Good.\"\n  elsif message.include?(\"?\")                  # sinon, est-ce une question ?\n    \"Silly question, get dressed and go to work!\"\n  else                                         # tout le reste\n    \"I don't care, get dressed and go to work!\"\n  end\nend</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Ajoute la règle « message tout en capitales » dans <code>coach_answer_enhanced</code>. Où la placer ?", "a": "<p>Avant la règle générale, et en tenant compte du fait qu'un message en capitales peut aussi contenir un <code>?</code>.</p><pre><code>def coach_answer_enhanced(message)\n  if message == \"I am going to work!\"\n    \"Good.\"\n  elsif message == message.upcase              # tout en capitales\n    \"I DON'T CARE, GET DRESSED AND GO TO WORK!\"\n  elsif message.include?(\"?\")\n    \"Silly question, get dressed and go to work!\"\n  else\n    \"I don't care, get dressed and go to work!\"\n  end\nend</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Écris <code>allowed_to_vote?(age)</code>.", "a": "<pre><code>def allowed_to_vote?(age)\n  age &gt;= 18            # l'expression booleenne est directement la valeur renvoyee\nend</code></pre>"}, {"bloc": "challenge", "type": "Traduction intention → code", "q": "Black Jack : comment tirer une carte entre 1 et 13 ?", "a": "<pre><code>def draw_card\n  rand(1..13)          # un Integer entre 1 et 13 inclus\nend</code></pre>"}, {"bloc": "challenge", "type": "Traduction intention → code", "q": "Black Jack : comment comparer les mains du joueur et du croupier ?", "a": "<pre><code>if player &gt; 21\n  \"Perdu, tu as depasse 21.\"\nelsif dealer &gt; 21\n  \"Gagne, le croupier a saute.\"\nelsif player &gt; dealer\n  \"Gagne !\"\nelse\n  \"Perdu.\"\nend</code></pre><div class=\"why\">Les cas de dépassement (spécifiques) passent avant la comparaison générale.</div>"}, {"bloc": "challenge", "type": "Production de code", "q": "<code>wagon_sort</code> + interface : comment récupérer une liste de nombres tapée au clavier et l'afficher triée ?", "a": "<pre><code>puts \"Entre des nombres separes par un espace :\"\nnumbers = gets.chomp.split.map(&amp;:to_i)   # String -&gt; tableau d'Integers\nputs wagon_sort(numbers).join(\", \")      # affichage lisible</code></pre>"}, {"bloc": "challenge", "type": "Choix idiomatique", "q": "Comment trier un tableau selon un critère calculé (ex. la longueur des mots) ?", "a": "<pre><code>[\"wagon\", \"le\", \"code\"].sort_by { |mot| mot.length }\n# => [\"le\", \"code\", \"wagon\"]</code></pre>"}, {"bloc": "rappel", "type": "Différence", "q": "Rappel J2 — <code>sort</code> vs <code>sort!</code> ?", "a": "<p><code>sort</code> renvoie une copie triée. <code>sort!</code> modifie le tableau en place. Le <code>!</code> = destructif.</p>"}, {"bloc": "rappel", "type": "Débogage", "q": "Rappel J2 — <code>\"le wagon\".titleize</code> lève <code>NoMethodError</code>. Pourquoi ?", "a": "<p><code>titleize</code> est du Rails, pas du Ruby core.</p><pre><code>\"le wagon\".split.map(&amp;:capitalize).join(\" \")</code></pre>"}, {"bloc": "rappel", "type": "Production de code", "q": "Rappel J2 — comment convertir une soustraction de dates en entier ?", "a": "<pre><code>(Date.today - birth_date).to_i   # le resultat brut est un Rational</code></pre>"}];
+const DIFFS = ["Ordre des branches : la phrase magique testée avant le point d'interrogation", "<code>include?</code> (présence) vs <code>==</code> (égalité exacte)", "<code>elsif</code>, jamais <code>elseif</code>", "<code>gets.chomp</code> en trop, ajouté à l'intérieur d'une méthode qui reçoit déjà un argument", "Modifier une méthode qui marche au lieu d'en écrire une seconde"];
+const LABELS = {coeur:"Cœur du cours",faible:"Point faible",challenge:"Challenge du jour",rappel:"Rappel espacé"};
+
+let order = DECK.map((_,i)=>i), pos = 0, flipped = false;
+const mastered = new Set(), missed = new Set(), guesses = {};
+const $ = id => document.getElementById(id);
+
+function render(){
+  const i = order[pos], c = DECK[i];
+  $('tagFront').innerHTML = '<span class="pill '+c.bloc+'">'+LABELS[c.bloc]+'</span><span>'+c.type+'</span>';
+  $('question').innerHTML = c.q;
+  $('back').innerHTML = c.a;
+  $('answer').value = guesses[i] || '';
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+  flipped = false; $('card').classList.remove('flipped');
+  $('counter').innerHTML = 'Carte <b>'+(pos+1)+'</b> / '+DECK.length+' · maîtrisées : <b>'+mastered.size+'</b> / '+DECK.length;
+  $('bar').style.width = (mastered.size/DECK.length*100)+'%';
+  $('prev').disabled = pos===0;
+  $('next').disabled = pos===DECK.length-1;
+}
+function flip(){
+  const i = order[pos];
+  if(!flipped) guesses[i] = $('answer').value;
+  flipped = !flipped;
+  $('card').classList.toggle('flipped', flipped);
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+}
+function go(d){ const n = pos+d; if(n<0||n>=DECK.length) return; pos = n; render(); }
+function evaluate(knew){
+  const i = order[pos];
+  if(knew){ mastered.add(i); missed.delete(i); } else { missed.add(i); mastered.delete(i); }
+  renderRevoir();
+  if(pos < DECK.length-1) go(1); else render();
+}
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+function renderBars(){
+  const counts = {};
+  DECK.forEach(c => counts[c.bloc] = (counts[c.bloc]||0)+1);
+  $('bars').innerHTML = Object.keys(LABELS).filter(k=>counts[k]).map(k=>{
+    const n = counts[k], pct = Math.round(n/DECK.length*100);
+    return '<div><span class="b" style="width:'+(pct*2)+'px;background:var(--'+k+')"></span>'+
+           '<span>'+LABELS[k]+' — <b>'+n+'</b> cartes ('+pct+'%)</span></div>';
+  }).join('');
+  $('diffs').innerHTML = DIFFS.map(d => '<li>'+d+'</li>').join('');
+}
+function renderRevoir(){
+  const list = [...missed];
+  $('revoir').innerHTML = list.length
+    ? '<p>Colle cette liste à Claude demain pour le rappel espacé :</p><pre><code>'+
+      list.map(i => '- ' + DECK[i].q.replace(/<[^>]+>/g,'')).join('\n') + '</code></pre>'
+    : 'Aucune carte marquée pour l\'instant.';
+}
+$('flip').addEventListener('click', flip);
+$('next').addEventListener('click', ()=>go(1));
+$('prev').addEventListener('click', ()=>go(-1));
+$('shuffle').addEventListener('click', shuffle);
+$('ok').addEventListener('click', ()=>evaluate(true));
+$('ko').addEventListener('click', ()=>evaluate(false));
+document.addEventListener('keydown', e=>{
+  if(e.altKey && e.key==='Enter'){ e.preventDefault(); flip(); return; }
+  if(document.activeElement === $('answer')) return;
+  if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if(e.key.toLowerCase()==='s') shuffle();
+  else if(flipped && e.key==='1') evaluate(false);
+  else if(flipped && e.key==='2') evaluate(true);
+});
+renderBars(); render(); renderRevoir();
+</script>
+</body>
+</html>

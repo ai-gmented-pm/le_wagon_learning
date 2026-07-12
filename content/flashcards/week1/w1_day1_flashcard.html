@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards — Ruby : méthodes, conditionnels & Setup Unix/Git</title>
+<style>
+  :root{--bg:#f4f5f7;--card:#fff;--accent:#B40A00;--ink:#1f2430;--muted:#6b7280;--code:#f6f8fa;--ok:#16a34a;--ko:#dc2626;
+        --coeur:#2563eb;--faible:#B40A00;--challenge:#b45309;--rappel:#7c3aed;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+  header{text-align:center;margin-bottom:8px}
+  header h1{font-size:20px;margin:0;color:var(--accent)}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .progress{width:100%;max-width:680px;height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:14px 0 6px}
+  .progress-bar{height:100%;background:var(--ok);width:0;transition:width .25s}
+  .counter{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center}
+  .counter b{color:var(--ink)}
+  .scene{width:100%;max-width:680px;perspective:1600px}
+  .card{position:relative;width:100%;min-height:380px;transform-style:preserve-3d;transition:transform .5s}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:28px;display:flex;flex-direction:column;overflow:auto}
+  .face .tag{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{border-radius:99px;padding:2px 9px;color:#fff;font-size:10px;letter-spacing:.4px}
+  .pill.coeur{background:var(--coeur)} .pill.faible{background:var(--faible)}
+  .pill.challenge{background:var(--challenge)} .pill.rappel{background:var(--rappel)}
+  .front .question{font-size:18px;font-weight:600;line-height:1.5}
+  .back{transform:rotateY(180deg)}
+  .back .content{font-size:15px;line-height:1.6}
+  textarea{width:100%;margin-top:auto;min-height:90px;border:1px solid #d1d5db;border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .guessed{margin-top:14px;background:var(--code);border-left:3px solid var(--muted);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+  .guessed b{color:var(--ink)}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.9em;font-family:SFMono-Regular,Consolas,monospace}
+  pre{background:#0d1117;color:#e6edf3;padding:14px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5}
+  pre code{background:none;padding:0;color:inherit}
+  .content p{margin:0 0 10px}
+  .why{font-size:13px;color:var(--muted);border-top:1px dashed #e5e7eb;padding-top:10px;margin-top:6px}
+  .selfeval{display:flex;gap:10px;margin-top:auto;padding-top:14px}
+  .controls{display:flex;gap:10px;margin-top:20px;width:100%;max-width:680px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;border:none;border-radius:9px;padding:11px 18px;cursor:pointer;font-weight:600;font-size:14px}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .btn-ok{background:var(--ok);color:#fff;flex:1}
+  .btn-ko{background:var(--ko);color:#fff;flex:1}
+  button:disabled{opacity:.4;cursor:default}
+  .recap{width:100%;max-width:680px;margin-top:26px;background:#fff;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px}
+  .recap h2{font-size:15px;margin:0 0 12px;color:var(--accent)}
+  .recap h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 0 8px}
+  .recap ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65}
+  .bars{display:flex;flex-direction:column;gap:6px;font-size:13px}
+  .bars div{display:flex;align-items:center;gap:8px}
+  .bars .b{height:8px;border-radius:99px}
+  #revoir{font-size:13.5px;line-height:1.6}
+  footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;max-width:680px}
+  kbd{background:#fff;border:1px solid #d1d5db;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:11px;font-family:inherit}
+</style>
+</head>
+<body>
+<header>
+  <h1>Flashcards — Ruby : méthodes, conditionnels & Setup Unix/Git</h1>
+  <p>Le Wagon · Batch 2319 · Semaine 1 · Jour 1 — lundi 6 juillet 2026</p>
+</header>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div class="counter" id="counter"></div>
+
+<div class="scene"><div class="card" id="card">
+  <div class="face front">
+    <div class="tag" id="tagFront"></div>
+    <div class="question" id="question"></div>
+    <textarea id="answer" placeholder="Écris ta réponse ici, puis alt + entrée pour retourner la carte…"></textarea>
+  </div>
+  <div class="face back">
+    <div class="tag">Réponse</div>
+    <div class="content" id="back"></div>
+    <div class="guessed" id="guessed"></div>
+    <div class="selfeval">
+      <button class="btn-ko" id="ko">✗ Did not know</button>
+      <button class="btn-ok" id="ok">✓ I knew it!</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="controls">
+  <button class="btn-ghost" id="prev">← Précédent</button>
+  <button class="btn-ghost" id="flip">Flip card</button>
+  <button class="btn-ghost" id="shuffle">Mélanger</button>
+  <button class="btn-primary" id="next">Suivant →</button>
+</div>
+
+<div class="recap">
+  <h2>Récapitulatif du set</h2>
+  <h3>Répartition réelle</h3>
+  <div class="bars" id="bars"></div>
+  <h3>Difficultés personnelles couvertes</h3>
+  <ul id="diffs"></ul>
+  <h3>À revoir demain (cartes « Did not know »)</h3>
+  <div id="revoir">Aucune carte marquée pour l'instant.</div>
+</div>
+
+<footer>
+  <kbd>←</kbd> <kbd>→</kbd> naviguer · <kbd>alt + ⏎</kbd> retourner · <kbd>S</kbd> mélanger · <kbd>1</kbd> did not know · <kbd>2</kbd> I knew it<br>
+  35 cartes · usage personnel · contenu © Le Wagon.
+</footer>
+
+<script>
+const DECK = [{"bloc": "coeur", "type": "Production de code", "q": "Comment déclarer une méthode <code>circle_area</code> qui prend un rayon en paramètre ?", "a": "<pre><code>def circle_area(radius)   # def, nom, parametre entre parentheses\n  # corps de la methode\nend                       # end ferme la definition</code></pre><div class=\"why\">Le nom du paramètre est libre : c'est une variable locale valable uniquement dans la méthode.</div>"}, {"bloc": "coeur", "type": "Vocabulaire", "q": "Que renvoie une méthode Ruby si elle ne contient aucun <code>return</code> explicite ?", "a": "<p>La <strong>dernière expression évaluée</strong> du corps de la méthode.</p><pre><code>def double(n)\n  n * 2                 # pas de return : c'est quand meme la valeur renvoyee\nend\ndouble(4)               # => 8</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment écrire une condition <code>si / sinon</code> en Ruby ?", "a": "<pre><code>if radius &lt; 0           # condition\n  0                     # branche vraie\nelse                    # sinon\n  radius * radius       # branche fausse\nend                     # end ferme le if</code></pre>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "Comment obtenir la valeur de π en Ruby sans écrire <code>3.14</code> ?", "a": "<pre><code>Math::PI                # => 3.141592653589793</code></pre><div class=\"why\"><code>3.14</code> est une approximation grossière : les tests attendent la précision de <code>Math::PI</code>.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment élever un nombre au carré en Ruby ?", "a": "<pre><code>radius ** 2             # l'operateur puissance\nradius * radius         # equivalent, moins idiomatique</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>puts</code> vs <code>print</code> : quelle différence ?", "a": "<p><code>puts</code> ajoute un retour à la ligne, <code>print</code> non. Les deux <strong>affichent</strong> et renvoient <code>nil</code>.</p><pre><code>print \"a\"; print \"b\"    # ab\nputs \"a\"; puts \"b\"      # a\\nb</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment insérer une variable dans une chaîne de caractères ?", "a": "<p>Par interpolation, avec des guillemets <strong>doubles</strong> obligatoires.</p><pre><code>name = \"Romain\"\nputs \"Bonjour #{name}\"  # Bonjour Romain\nputs 'Bonjour #{name}'  # Bonjour #{name}  <- simples : pas d'interpolation</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment exécuter un fichier Ruby depuis le terminal ?", "a": "<pre><code>ruby lib/circle_area.rb</code></pre><div class=\"why\">Le fichier doit porter l'extension <code>.rb</code> et le chemin est relatif au dossier courant.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment écrire un commentaire en Ruby ?", "a": "<pre><code># un commentaire tient sur une ligne, apres le diese</code></pre><div class=\"why\">Utile pour poser ton pseudo-code avant d'écrire la syntaxe.</div>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Que vaut <code>7 / 2</code> en Ruby ?", "a": "<p><code>3</code>. Deux entiers donnent une division <strong>entière</strong>.</p><pre><code>7 / 2      # => 3\n7 / 2.0    # => 3.5   un flottant suffit a tout changer</code></pre>"}, {"bloc": "coeur", "type": "Traduction intention → code", "q": "Comment tester qu'un nombre est strictement négatif ?", "a": "<pre><code>if radius &lt; 0           # strictement inferieur a zero\n  # ...\nend</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "Quelle différence entre un paramètre et un argument ?", "a": "<p>Le <strong>paramètre</strong> est le nom déclaré à la définition, l'<strong>argument</strong> est la valeur passée à l'appel.</p><pre><code>def circle_area(radius)   # radius = parametre\nend\ncircle_area(5)            # 5 = argument</code></pre>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment appeler une méthode et stocker son résultat ?", "a": "<pre><code>area = circle_area(3)   # la valeur renvoyee est affectee a area\nputs area               # on affiche seulement maintenant</code></pre>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "Une méthode doit-elle afficher ou renvoyer son résultat, dans les exercices Le Wagon ?", "a": "<p>Elle <strong>renvoie</strong>. L'affichage se fait ailleurs (l'interface, ou <code>puts</code> à l'appel).</p><div class=\"why\">RSpec teste la valeur de retour : un <code>puts</code> à la place d'un <code>return</code> fait échouer le test même si la console affiche la bonne chose.</div>"}, {"bloc": "faible", "type": "Différence", "q": "<code>puts</code> vs <code>return</code> : que renvoie chacun ?", "a": "<p><code>puts</code> affiche et renvoie <code>nil</code>. <code>return</code> renvoie une valeur au code appelant, sans rien afficher.</p><pre><code>def f\n  puts \"hello\"   # affiche hello, renvoie nil\nend\nf                # => nil</code></pre><div class=\"why\">Ta confusion n°1 de la journée. Test : « qui a besoin du résultat ? » Un humain → <code>puts</code>. Le code → <code>return</code>.</div>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi ce test échoue-t-il ?<pre><code>def circle_area(radius)\n  puts Math::PI * radius ** 2\nend</code></pre>", "a": "<p>La méthode affiche la bonne valeur mais <strong>renvoie <code>nil</code></strong>.</p><pre><code>def circle_area(radius)\n  Math::PI * radius ** 2   # TO BE : derniere expression = valeur renvoyee\nend</code></pre>"}, {"bloc": "faible", "type": "Différence", "q": "<code>=</code> vs <code>==</code> : lequel affecte, lequel compare ?", "a": "<p><code>=</code> <strong>affecte</strong> une valeur à une variable. <code>==</code> <strong>compare</strong> et renvoie <code>true</code> ou <code>false</code>.</p><pre><code>x = 5      # x vaut maintenant 5\nx == 5     # => true</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Que se passe-t-il ici ?<pre><code>if radius = 0\n  0\nend</code></pre>", "a": "<p><code>radius</code> est <strong>écrasé</strong> par <code>0</code>, et la condition évalue <code>0</code>, qui est <em>truthy</em> en Ruby. La branche s'exécute toujours.</p><pre><code>if radius == 0   # TO BE : double egal pour comparer</code></pre>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que renvoie cette méthode ?<pre><code>def test\n  1\n  2\n  3\nend</code></pre>", "a": "<p><code>3</code> : seule la dernière expression évaluée est renvoyée. Les deux premières lignes sont calculées puis jetées.</p>"}, {"bloc": "faible", "type": "Choix idiomatique", "q": "Dans un <code>if / else</code>, faut-il un <code>return</code> dans chaque branche ?", "a": "<p>Non. La valeur du <code>if</code> est celle de la branche exécutée, et c'est elle qui remonte.</p><pre><code>def area(radius)\n  if radius &lt; 0\n    0                        # renvoye si negatif\n  else\n    Math::PI * radius ** 2   # renvoye sinon\n  end\nend</code></pre>"}, {"bloc": "faible", "type": "Traduction intention → code", "q": "Un rayon négatif doit renvoyer 0, sinon l'aire. Quelle branche teste-t-on en premier ?", "a": "<p>Le <strong>cas particulier</strong> (le négatif), puis le cas général en <code>else</code>.</p><div class=\"why\">Règle générale : du plus spécifique au plus général. Une branche large placée en premier avale les cas particuliers.</div>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi <code>0</code> ne suffit-il pas à sortir de la méthode ici ?<pre><code>def area(radius)\n  0 if radius &lt; 0\n  Math::PI * radius ** 2\nend</code></pre>", "a": "<p>La ligne <code>0 if …</code> est évaluée puis jetée : la dernière expression reste le calcul de l'aire, exécuté même pour un rayon négatif.</p><pre><code>return 0 if radius &lt; 0   # TO BE : return sort immediatement de la methode</code></pre>"}, {"bloc": "faible", "type": "Vocabulaire", "q": "En Ruby, quelles valeurs sont <em>falsy</em> ?", "a": "<p>Uniquement <code>false</code> et <code>nil</code>. Tout le reste est vrai : <code>0</code>, <code>\"\"</code>, <code>[]</code> inclus.</p><div class=\"why\">C'est pour ça que <code>if x = 0</code> ne se comporte pas du tout comme tu l'attendrais.</div>"}, {"bloc": "faible", "type": "Différence", "q": "Quelle différence entre afficher dans le terminal et renvoyer une valeur testable ?", "a": "<p>L'affichage est un effet de bord destiné à l'humain. La valeur de retour est la <strong>seule chose</strong> que le code appelant (et RSpec) peut manipuler.</p>"}, {"bloc": "faible", "type": "Débogage", "q": "<code>ruby circle_area.rb</code> renvoie <code>No such file or directory</code>. Que vérifier ?", "a": "<p>Le <strong>chemin</strong>. Tu es probablement à la racine du challenge et le fichier est dans <code>lib/</code>.</p><pre><code>pwd                     # ou suis-je ?\nls lib                  # le fichier est-il la ?\nruby lib/circle_area.rb</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Écris <code>circle_area</code> en entier : 0 si le rayon est négatif, l'aire sinon.", "a": "<pre><code>def circle_area(radius)\n  return 0 if radius &lt; 0        # cas particulier d'abord, sortie immediate\n  Math::PI * radius ** 2        # cas general, dernier evalue = renvoye\nend</code></pre>"}, {"bloc": "challenge", "type": "Différence", "q": "Git : <code>origin</code> vs <code>upstream</code>, à quoi correspond chacun ?", "a": "<p><code>origin</code> = <strong>ton</strong> fork sur ton compte GitHub. <code>upstream</code> = le dépôt d'origine de Le Wagon.</p><pre><code>git remote -v          # liste les remotes configures</code></pre>"}, {"bloc": "challenge", "type": "Débogage", "q": "<code>fatal: 'origin' does not appear to be a git repository</code>. Quel diagnostic ?", "a": "<p>Aucun remote n'est configuré. Vérifie d'abord :</p><pre><code>git remote -v          # sortie vide = aucun remote</code></pre><div class=\"why\">C'est le clone (pas le fork) qui crée le lien local → distant. Un fork seul ne configure rien sur ta machine.</div>"}, {"bloc": "challenge", "type": "Différence", "q": "Forker vs cloner : que fait chacun, et où ?", "a": "<p><strong>Fork</strong> : action sur GitHub, copie le dépôt sur ton compte. <strong>Clone</strong> : action locale, télécharge le dépôt sur ta machine et configure <code>origin</code>.</p>"}, {"bloc": "challenge", "type": "Différence", "q": "Chemin relatif vs chemin absolu : <code>~/tmp</code> et <code>/tmp</code>, est-ce le même dossier ?", "a": "<p>Non. <code>/tmp</code> part de la racine du système. <code>~/tmp</code> est <code>/Users/toi/tmp</code>, dans ton home.</p><div class=\"why\">Un slash initial = absolu. Rien ou <code>./</code> = relatif au dossier courant.</div>"}, {"bloc": "challenge", "type": "Production de code", "q": "Tu es dans <code>level1/level2</code>. Comment déplacer le dossier <code>configuration</code> vers <code>level1</code> ?", "a": "<pre><code>mv configuration ..    # .. designe le dossier parent</code></pre><div class=\"why\"><code>mv source destination</code> : la destination peut être un chemin relatif, et <code>..</code> veut dire « un cran au-dessus ».</div>"}, {"bloc": "challenge", "type": "Traduction intention → code", "q": "Comment envoyer ton travail sur ton fork ?", "a": "<pre><code>git add .              # met les changements en scene\ngit commit -m \"done\"   # les enregistre localement\ngit push origin master # les envoie sur ton fork</code></pre>"}, {"bloc": "rappel", "type": "Production de code", "q": "Terminal : comment savoir dans quel dossier tu te trouves ?", "a": "<pre><code>pwd                    # print working directory</code></pre>"}, {"bloc": "rappel", "type": "Production de code", "q": "Comment lister les fichiers cachés d'un dossier ?", "a": "<pre><code>ls -a                  # -a = all, inclut les fichiers en .quelquechose</code></pre>"}, {"bloc": "rappel", "type": "Traduction intention → code", "q": "Comment revenir au dossier parent depuis le terminal ?", "a": "<pre><code>cd ..                  # remonte d'un niveau\ncd ~                   # retour direct au home</code></pre>"}];
+const DIFFS = ["<code>puts</code> vs <code>return</code> (le point de bascule de la journée)", "<code>=</code> (affectation) vs <code>==</code> (comparaison)", "Retour implicite : une méthode renvoie sa dernière expression évaluée", "Ordre des branches conditionnelles : le cas particulier avant le cas général", "Fork (GitHub) vs clone (local) : ce qui crée le lien avec <code>origin</code>"];
+const LABELS = {coeur:"Cœur du cours",faible:"Point faible",challenge:"Challenge du jour",rappel:"Rappel espacé"};
+
+let order = DECK.map((_,i)=>i), pos = 0, flipped = false;
+const mastered = new Set(), missed = new Set(), guesses = {};
+const $ = id => document.getElementById(id);
+
+function render(){
+  const i = order[pos], c = DECK[i];
+  $('tagFront').innerHTML = '<span class="pill '+c.bloc+'">'+LABELS[c.bloc]+'</span><span>'+c.type+'</span>';
+  $('question').innerHTML = c.q;
+  $('back').innerHTML = c.a;
+  $('answer').value = guesses[i] || '';
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+  flipped = false; $('card').classList.remove('flipped');
+  $('counter').innerHTML = 'Carte <b>'+(pos+1)+'</b> / '+DECK.length+' · maîtrisées : <b>'+mastered.size+'</b> / '+DECK.length;
+  $('bar').style.width = (mastered.size/DECK.length*100)+'%';
+  $('prev').disabled = pos===0;
+  $('next').disabled = pos===DECK.length-1;
+}
+function flip(){
+  const i = order[pos];
+  if(!flipped) guesses[i] = $('answer').value;
+  flipped = !flipped;
+  $('card').classList.toggle('flipped', flipped);
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+}
+function go(d){ const n = pos+d; if(n<0||n>=DECK.length) return; pos = n; render(); }
+function evaluate(knew){
+  const i = order[pos];
+  if(knew){ mastered.add(i); missed.delete(i); } else { missed.add(i); mastered.delete(i); }
+  renderRevoir();
+  if(pos < DECK.length-1) go(1); else render();
+}
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+function renderBars(){
+  const counts = {};
+  DECK.forEach(c => counts[c.bloc] = (counts[c.bloc]||0)+1);
+  $('bars').innerHTML = Object.keys(LABELS).filter(k=>counts[k]).map(k=>{
+    const n = counts[k], pct = Math.round(n/DECK.length*100);
+    return '<div><span class="b" style="width:'+(pct*2)+'px;background:var(--'+k+')"></span>'+
+           '<span>'+LABELS[k]+' — <b>'+n+'</b> cartes ('+pct+'%)</span></div>';
+  }).join('');
+  $('diffs').innerHTML = DIFFS.map(d => '<li>'+d+'</li>').join('');
+}
+function renderRevoir(){
+  const list = [...missed];
+  $('revoir').innerHTML = list.length
+    ? '<p>Colle cette liste à Claude demain pour le rappel espacé :</p><pre><code>'+
+      list.map(i => '- ' + DECK[i].q.replace(/<[^>]+>/g,'')).join('\n') + '</code></pre>'
+    : 'Aucune carte marquée pour l\'instant.';
+}
+$('flip').addEventListener('click', flip);
+$('next').addEventListener('click', ()=>go(1));
+$('prev').addEventListener('click', ()=>go(-1));
+$('shuffle').addEventListener('click', shuffle);
+$('ok').addEventListener('click', ()=>evaluate(true));
+$('ko').addEventListener('click', ()=>evaluate(false));
+document.addEventListener('keydown', e=>{
+  if(e.altKey && e.key==='Enter'){ e.preventDefault(); flip(); return; }
+  if(document.activeElement === $('answer')) return;
+  if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if(e.key.toLowerCase()==='s') shuffle();
+  else if(flipped && e.key==='1') evaluate(false);
+  else if(flipped && e.key==='2') evaluate(true);
+});
+renderBars(); render(); renderRevoir();
+</script>
+</body>
+</html>

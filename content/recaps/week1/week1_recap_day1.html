@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap du jour - Le Wagon - Lundi 6 juillet</title>
+<style>
+  :root{
+    --paper:#fdfcf7;--ink:#1f2430;--muted:#6b7280;--line:#e7e3d6;
+    --accent:#c0562b;--spine:#8a3c1d;--concept:#2563a8;--trap:#b3341f;
+    --pattern:#2f7d54;--voc:#7a5cc0;--quiz:#a8781f;--code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5;}
+  .fiche{max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(var(--paper),var(--paper) 30px,#f5f2e8 31px);}
+  header{border-bottom:3px double var(--accent);padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 12px;
+    padding-left:12px;border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;border-left:4px solid var(--spine);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;border:1px solid #f0d9d3;
+    border-radius:6px;padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);padding-top:10px;color:var(--muted);
+    font-size:12px;font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon · Camp 2319 · Recap</div>
+    <h1>Recap du jour — Jour 1</h1>
+    <div class="meta">Lundi 6 juillet 2026 · Premier contact Ruby (<code>circle_area</code>), remotes Git, navigation Unix. <em>Cours non fourni : fiche bâtie sur la session.</em></div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Mes questions &amp; incompréhensions</h2>
+
+    <div class="qa">
+      <div class="q">« Dans ma méthode, je mets <code>puts</code> ou <code>return</code> ? »</div>
+      <div class="a">Les deux ne servent pas au même public. <code>puts</code> parle à l'humain (il écrit dans le terminal, puis renvoie <code>nil</code>). <code>return</code> parle au programme (il transmet une valeur exploitable par la ligne appelante). Un test RSpec appelle la méthode et regarde sa valeur de retour : il ne lit pas l'écran. Donc dans une méthode testée, c'est <code>return</code> (ou la dernière expression évaluée).</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>3.14</code>, ça suffit pour π ? »</div>
+      <div class="a">Non, si le test compare à la valeur exacte. Ruby fournit <code>Math::PI</code>, qui est la constante en précision flottante. Écrire une approximation en dur, c'est introduire volontairement une erreur dans un calcul, alors que le langage donne la valeur juste.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>fatal: 'origin' does not appear to be a git repository</code> alors que j'ai bien forké. »</div>
+      <div class="a">Le fork est une action GitHub : il crée une copie du dépôt sur ton compte, en ligne. Il ne crée aucun lien sur ta machine. C'est le <code>clone</code> qui crée le dossier local et enregistre le remote <code>origin</code>. Diagnostic : <code>git remote -v</code>. S'il ne renvoie rien, aucun remote n'est configuré, donc <code>git push origin</code> n'a aucune adresse où pousser.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« C'est quoi la différence entre <code>origin</code> et <code>upstream</code> ? »</div>
+      <div class="a">Ce sont deux étiquettes pointant vers deux dépôts distants différents. <code>origin</code> = ton fork (tu y pousses). <code>upstream</code> = le dépôt d'origine du Wagon (tu en tires les mises à jour, tu n'y pousses pas). Rien n'est magique dans ces noms : ce sont des conventions.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Pourquoi mon <code>mv</code> échoue quand je suis déjà dans <code>level2</code> ? »</div>
+      <div class="a">Parce que la destination est exprimée depuis ta position courante. Si tu es dans <code>level2</code> et que tu veux envoyer un dossier dans <code>level1</code> (le parent), la destination s'écrit <code>..</code> et non <code>level1</code> : depuis l'intérieur de <code>level2</code>, il n'existe aucun chemin nommé <code>level1</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>~/tmp</code> et <code>/tmp</code>, c'est pareil ? »</div>
+      <div class="a">Non. <code>/tmp</code> est un chemin absolu : il part de la racine du disque. <code>~/tmp</code> est relatif à ton dossier personnel, donc <code>/Users/&lt;toi&gt;/tmp</code>. Deux dossiers différents, à deux endroits différents.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b>Valeur de retour d'une méthode</b>
+      <div class="why">Une méthode est une machine qui rend un objet. Ce qu'elle rend, c'est ce que la suite du programme pourra utiliser. Afficher n'est pas rendre : c'est un effet de bord.</div>
+    </div>
+    <div class="card">
+      <b>Le conditionnel garde-fou</b>
+      <div class="why">Tester le cas invalide (rayon négatif) avant de calculer, c'est protéger le calcul. On ne calcule que sur des entrées dont on a vérifié qu'elles ont un sens.</div>
+    </div>
+    <div class="card">
+      <b>Fork ≠ clone</b>
+      <div class="why">Le fork vit sur GitHub (serveur à serveur). Le clone vit sur ta machine (serveur vers local) et c'est lui qui crée le lien remote. Tant que tu n'as pas cloné, ton disque ne connaît personne.</div>
+    </div>
+    <div class="card">
+      <b>Chemin relatif / chemin absolu</b>
+      <div class="why">Un chemin relatif dépend d'où tu te trouves : il change de sens selon le dossier courant. Un chemin absolu est vrai partout. La plupart des erreurs de terminal viennent d'un chemin relatif interprété depuis la mauvaise position.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> la méthode affiche le bon résultat dans le terminal mais le test échoue.</div>
+      <div><b>Cause :</b> <code>puts</code> à la place de <code>return</code>. La méthode renvoie <code>nil</code>.</div>
+      <div><b>Correctif :</b> AS IS <code>puts Math::PI * radius ** 2</code> → TO BE <code>return Math::PI * radius ** 2</code> <span class="cmt"># la valeur remonte à l'appelant, pas à l'écran</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>git push origin master</code> renvoie <code>fatal: 'origin' does not appear to be a git repository</code>.</div>
+      <div><b>Cause :</b> aucun remote enregistré (<code>git remote -v</code> vide), le dossier n'a pas été obtenu par un clone.</div>
+      <div><b>Correctif :</b> cloner le fork, ou ajouter le remote explicitement avec <code>git remote add origin &lt;url&gt;</code>.</div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>mv configuration level1</code> échoue depuis <code>level2</code>.</div>
+      <div><b>Cause :</b> <code>level1</code> n'existe pas <em>à l'intérieur</em> de <code>level2</code>, c'est son parent.</div>
+      <div><b>Correctif :</b> <code>mv configuration ..</code> <span class="cmt"># .. désigne le dossier parent</span></div>
+    </div>
+  </section>
+
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+    <pre><code>def circle_area(radius)                 <span class="cmt"># on définit une méthode qui reçoit un paramètre "radius"</span>
+  if radius &lt; 0                         <span class="cmt"># on traite d'abord le cas invalide : un rayon négatif n'a pas de sens</span>
+    return 0                            <span class="cmt"># on sort immédiatement de la méthode en renvoyant 0</span>
+  end                                   <span class="cmt"># on ferme le if</span>
+
+  Math::PI * radius ** 2                <span class="cmt"># dernière expression évaluée : Ruby la renvoie automatiquement</span>
+end                                     <span class="cmt"># on ferme la méthode</span></code></pre>
+
+    <pre><code>git remote -v                           <span class="cmt"># liste les dépôts distants connus (vide = aucun remote)</span>
+git clone &lt;url-de-mon-fork&gt;             <span class="cmt"># crée le dossier local ET enregistre "origin" automatiquement</span>
+git remote add upstream &lt;url-lewagon&gt;   <span class="cmt"># ajoute le dépôt d'origine sous l'étiquette "upstream"</span></code></pre>
+
+    <pre><code>pwd                                     <span class="cmt"># affiche le chemin absolu du dossier courant : d'où je parle ?</span>
+mv configuration ..                     <span class="cmt"># déplace "configuration" vers le dossier parent (..)</span></code></pre>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode / commande</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>puts</code></td><td>Affiche dans le terminal</td><td><code>nil</code></td></tr>
+        <tr><td><code>return</code></td><td>Sort de la méthode en transmettant une valeur</td><td>La valeur transmise</td></tr>
+        <tr><td><code>Math::PI</code></td><td>Constante π en Float</td><td><code>3.141592653589793</code></td></tr>
+        <tr><td><code>**</code></td><td>Élévation à la puissance</td><td>Nombre</td></tr>
+        <tr><td><code>git remote -v</code></td><td>Liste les remotes configurés</td><td>Rien si aucun remote</td></tr>
+        <tr><td><code>..</code></td><td>Désigne le dossier parent</td><td>Chemin relatif</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+
+    <details>
+      <summary>Que renvoie <code>puts "hello"</code> ?</summary>
+      <div class="ans"><code>nil</code>. L'affichage est un effet de bord, pas une valeur de retour.</div>
+    </details>
+
+    <details>
+      <summary>J'ai forké le repo du Wagon. Est-ce que <code>origin</code> est configuré sur ma machine ?</summary>
+      <div class="ans">Non. Le fork est une opération GitHub uniquement. C'est le <code>clone</code> qui crée le dossier local et enregistre <code>origin</code>.</div>
+    </details>
+
+    <details>
+      <summary>Je suis dans <code>~/code/level1/level2</code>. Quelle commande envoie le dossier <code>configuration</code> dans <code>level1</code> ?</summary>
+      <div class="ans"><code>mv configuration ..</code> (la destination s'exprime depuis ma position courante).</div>
+    </details>
+
+    <details>
+      <summary>Sans écrire <code>return</code>, que renvoie une méthode Ruby ?</summary>
+      <div class="ans">La dernière expression évaluée. C'est le retour implicite.</div>
+    </details>
+  </section>
+
+  <footer>Priorité de révision : <code>puts</code> vs <code>return</code> (sticking point n°1). Vérifier systématiquement <code>pwd</code> avant toute commande à chemin relatif.</footer>
+
+</div>
+</body>
+</html>

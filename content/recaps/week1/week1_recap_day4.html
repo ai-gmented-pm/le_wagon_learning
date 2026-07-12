@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap du jour - Le Wagon - 20260709</title>
+<style>
+  :root{
+    --paper:#fdfcf7;--ink:#1f2430;--muted:#6b7280;--line:#e7e3d6;
+    --accent:#c0562b;--spine:#8a3c1d;--concept:#2563a8;--trap:#b3341f;
+    --pattern:#2f7d54;--voc:#7a5cc0;--quiz:#a8781f;--code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5;}
+  .fiche{max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(var(--paper),var(--paper) 30px,#f5f2e8 31px);}
+  header{border-bottom:3px double var(--accent);padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 12px;
+    padding-left:12px;border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;border-left:4px solid var(--spine);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;border:1px solid #f0d9d3;
+    border-radius:6px;padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);padding-top:10px;color:var(--muted);
+    font-size:12px;font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon &middot; Camp 2319 &middot; Recap</div>
+    <h1>Recap du jour — Jour 4</h1>
+    <div class="meta">Jeudi 9 juillet 2026 · Itérateurs, blocs et enumerables : <code>select</code>, <code>reject</code>, <code>find</code>, <code>map</code>, <code>reduce</code>, <code>each_slice</code>, <code>yield</code>. <em>Cours non fourni : fiche bâtie sur la session.</em></div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Mes questions &amp; incompréhensions</h2>
+
+    <div class="qa">
+      <div class="q">« J'écris <code>each_slice</code> sur le nom de ma méthode et ça plante. »</div>
+      <div class="a">Confusion nom de méthode / nom de paramètre. <code>def sorted_pairs(an_array)</code> : la méthode s'appelle <code>sorted_pairs</code>, mais la donnée sur laquelle on travaille s'appelle <code>an_array</code>. Une méthode ne se parcourt pas : c'est le TABLEAU reçu en paramètre qu'on itère. Réflexe : « sur quel objet je veux agir ? » et pas « comment s'appelle mon exercice ? ».</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Pourquoi <code>each</code> ne me renvoie pas le résultat que je construis ? »</div>
+      <div class="a">Parce que <code>each</code> renvoie le tableau de DÉPART, pas ce qui se passe dedans. Son seul rôle est de parcourir. Si tu veux récupérer une transformation, il te faut soit <code>map</code> (qui renvoie un nouveau tableau des valeurs du bloc), soit un accumulateur déclaré AVANT la boucle et renvoyé APRÈS.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Ma variable déclarée dans le bloc n'existe plus après. »</div>
+      <div class="a">Un bloc est un contenant. Une variable créée à l'intérieur meurt à la fermeture du bloc. Une variable créée AVANT le bloc est visible à l'intérieur, et les modifications qu'on lui fait survivent. D'où le pattern de l'accumulateur : <code>somme = 0</code> avant, <code>somme += ...</code> dedans, <code>somme</code> après.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Dans un <code>select</code>, je mets un <code>if</code> ? »</div>
+      <div class="a">Non. <code>select</code> attend déjà un booléen : il garde l'élément si le bloc est vrai. Écrire <code>if number.even?</code> dedans, c'est faire deux fois le travail. AS IS <code>select { |n| if n.even? }</code> → TO BE <code>select { |n| n.even? }</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>{ }</code> ou <code>do...end</code> ? Et je mets les <code>|variables|</code> où ? »</div>
+      <div class="a">Les deux syntaxes font la même chose. Convention : <code>{ }</code> sur une seule ligne, <code>do...end</code> sur plusieurs. Dans les deux cas, les paramètres du bloc sont DANS le bloc, juste après l'ouverture : <code>{ |n| ... }</code> ou <code>do |n| ... end</code>. Jamais avant l'accolade, jamais après <code>end</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>count</code> ne fait pas la même chose selon les cas ? »</div>
+      <div class="a">Exact. Sur un <code>Array</code>, <code>count</code> sans argument renvoie le nombre d'éléments. Sur une <code>String</code>, <code>count</code> EXIGE un argument : c'est le nombre d'occurrences des caractères donnés. <code>"hello".count</code> plante ; <code>"hello".count("l")</code> renvoie 2. Pour la longueur d'une chaîne, c'est <code>length</code> ou <code>size</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Comment j'imbrique des guillemets dans une interpolation ? »</div>
+      <div class="a">Dans une chaîne délimitée par <code>"</code>, un guillemet double interne doit être échappé avec un antislash : <code>\"</code>. Et on n'a pas besoin de concaténer avec <code>+</code> si on interpole : <code>"&lt;a href=\"#{url}\"&gt;"</code> est complet, tout est dans une seule chaîne.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Argument ou attribut ? »</div>
+      <div class="a">Un ARGUMENT est une valeur qu'on passe à une méthode au moment de l'appel : il vit le temps de l'appel. Un ATTRIBUT est une donnée qui appartient à l'objet et qui persiste entre les appels. <code>player.attack(10)</code> : 10 est un argument, <code>player.health</code> est un attribut.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b>Le bloc, un morceau de code passé en argument</b>
+      <div class="why">Un itérateur ne sait pas quoi faire des éléments : c'est le bloc qui le lui dit. <code>select</code> sait filtrer, mais c'est TON bloc qui définit le critère. C'est pour ça qu'un seul itérateur sert à mille usages.</div>
+    </div>
+    <div class="card">
+      <b>Choisir son itérateur par sa VALEUR DE RETOUR</b>
+      <div class="why">C'est le seul critère qui compte. <code>each</code> renvoie le tableau d'origine (donc on l'utilise pour ses effets de bord). <code>map</code> renvoie un tableau transformé, même taille. <code>select</code>/<code>reject</code> renvoient un tableau filtré, taille plus petite. <code>find</code> renvoie UN élément. <code>reduce</code> renvoie une seule valeur agrégée.</div>
+    </div>
+    <div class="card">
+      <b>Le pattern accumulateur</b>
+      <div class="why">Déclarer la variable AVANT la boucle (sinon elle meurt à chaque tour et n'existe plus après), la modifier DANS la boucle, la renvoyer APRÈS. C'est la mécanique manuelle de ce que <code>reduce</code> automatise.</div>
+    </div>
+    <div class="card">
+      <b><code>yield</code> : ma méthode accepte un bloc</b>
+      <div class="why"><code>yield</code> exécute le bloc passé à l'appel, à l'endroit exact où il est écrit. C'est le mécanisme qui permet de laisser l'appelant décider d'une partie du comportement, sans que la méthode connaisse ce comportement à l'avance.</div>
+    </div>
+    <div class="card">
+      <b>Paramètre optionnel</b>
+      <div class="why"><code>def tag(name, content = nil)</code> : si l'appelant n'a rien passé, le paramètre vaut <code>nil</code>, et on peut brancher dessus. Cela permet une méthode à deux comportements sans en écrire deux.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>undefined method 'each_slice' for nil</code> ou <code>NoMethodError</code> sur le nom de la méthode.</div>
+      <div><b>Cause :</b> l'itérateur est appliqué au nom de la méthode et non au paramètre.</div>
+      <div><b>Correctif :</b> AS IS <code>sorted_pairs.each_slice(2)</code> → TO BE <code>an_array.each_slice(2)</code> <span class="cmt"># on itère sur la DONNÉE, pas sur le nom de l'exercice</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> la méthode renvoie le tableau de départ, non transformé.</div>
+      <div><b>Cause :</b> <code>each</code> renvoie toujours son receveur. Il ne collecte rien.</div>
+      <div><b>Correctif :</b> AS IS <code>an_array.each { |n| n * 2 }</code> → TO BE <code>an_array.map { |n| n * 2 }</code> <span class="cmt"># map collecte les valeurs du bloc</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>select</code> renvoie tous les éléments au lieu de filtrer.</div>
+      <div><b>Cause :</b> <code>if</code> redondant à l'intérieur du bloc, dont la valeur de retour n'est plus le booléen attendu.</div>
+      <div><b>Correctif :</b> AS IS <code>select { |n| if n.even? }</code> → TO BE <code>select { |n| n.even? }</code> <span class="cmt"># le bloc DOIT valoir true ou false</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>ArgumentError: wrong number of arguments</code> sur <code>"hello".count</code>.</div>
+      <div><b>Cause :</b> sur une <code>String</code>, <code>count</code> exige un argument. Ce n'est pas la même méthode que sur <code>Array</code>.</div>
+      <div><b>Correctif :</b> AS IS <code>word.count</code> → TO BE <code>word.size</code> <span class="cmt"># pour compter les caractères d'une chaîne</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> la variable construite dans le bloc est <code>nil</code> après la boucle.</div>
+      <div><b>Cause :</b> elle a été déclarée À L'INTÉRIEUR du bloc, elle meurt à chaque fermeture.</div>
+      <div><b>Correctif :</b> déclarer l'accumulateur AVANT la boucle. <span class="cmt"># il survit alors à chaque itération</span></div>
+    </div>
+  </section>
+
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+
+    <pre><code>def sum_odd_indexed(an_array)                    <span class="cmt"># le paramètre s'appelle an_array, PAS sum_odd_indexed</span>
+  somme = 0                                      <span class="cmt"># accumulateur déclaré AVANT la boucle : il doit lui survivre</span>
+  an_array.each_with_index do |element, index|   <span class="cmt"># each_with_index fournit DEUX variables de bloc : la valeur et sa position</span>
+    somme += element if index.odd?               <span class="cmt"># on n'ajoute que si l'index est impair (if en modificateur, en fin de ligne)</span>
+  end                                            <span class="cmt"># fin du bloc : each_with_index renvoie an_array, on l'ignore</span>
+  somme                                          <span class="cmt"># c'est l'accumulateur qu'on renvoie, pas le retour de each</span>
+end</code></pre>
+
+    <pre><code>def even_numbers(an_array)                       <span class="cmt"># objectif : garder uniquement les nombres pairs</span>
+  an_array.select { |number| number.even? }      <span class="cmt"># select garde l'élément si le bloc vaut true : pas de if à l'intérieur</span>
+end                                              <span class="cmt"># select renvoie un NOUVEAU tableau filtré, retour implicite</span></code></pre>
+
+    <pre><code>def short_words(an_array)                        <span class="cmt"># objectif : retirer les mots longs</span>
+  an_array.reject { |word| word.size &gt; 5 }       <span class="cmt"># reject est l'inverse de select : il ÉLIMINE si le bloc vaut true</span>
+end                                              <span class="cmt"># on utilise size (et non count) sur une String</span></code></pre>
+
+    <pre><code>def first_under(an_array, limit)                 <span class="cmt"># objectif : le PREMIER élément sous la limite</span>
+  an_array.find { |number| number &lt; limit }      <span class="cmt"># find s'arrête au premier match et renvoie l'ÉLÉMENT (pas un tableau)</span>
+end                                              <span class="cmt"># renvoie nil si aucun élément ne correspond</span></code></pre>
+
+    <pre><code>def concatenate(an_array)                        <span class="cmt"># objectif : coller toutes les chaînes bout à bout</span>
+  an_array.reduce("") { |resultat, mot| resultat + mot } <span class="cmt"># "" est l'accumulateur initial ; à chaque tour on lui ajoute le mot</span>
+end                                              <span class="cmt"># reduce renvoie l'accumulateur final : UNE seule valeur</span></code></pre>
+
+    <pre><code>def sorted_pairs(an_array)                       <span class="cmt"># objectif : trier chaque paire d'éléments consécutifs</span>
+  an_array.each_slice(2)                         <span class="cmt"># découpe le tableau en tranches de 2 éléments</span>
+          .map { |paire| paire.sort }            <span class="cmt"># map transforme chaque tranche en sa version triée</span>
+end                                              <span class="cmt"># chaînage : la sortie de each_slice devient l'entrée de map</span></code></pre>
+
+    <pre><code>def tag(name, content = nil)                     <span class="cmt"># content est optionnel : vaut nil si non fourni</span>
+  if content.nil?                                <span class="cmt"># si aucun contenu n'a été passé...</span>
+    "&lt;#{name}&gt;#{yield}&lt;/#{name}&gt;"                <span class="cmt"># ...on exécute le BLOC passé à l'appel avec yield</span>
+  else                                           <span class="cmt"># sinon...</span>
+    "&lt;#{name}&gt;#{content}&lt;/#{name}&gt;"              <span class="cmt"># ...on utilise directement le contenu fourni</span>
+  end                                            <span class="cmt"># la branche empruntée est la valeur de retour</span>
+end
+
+tag("p") { "Bonjour" }                           <span class="cmt"># le bloc est ce que yield ira exécuter => "&lt;p&gt;Bonjour&lt;/p&gt;"</span></code></pre>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>each</code></td><td>Parcourt sans rien collecter</td><td>Le tableau de DÉPART</td></tr>
+        <tr><td><code>each_with_index</code></td><td>Parcourt en fournissant valeur ET index</td><td>Le tableau de DÉPART</td></tr>
+        <tr><td><code>map</code></td><td>Transforme chaque élément</td><td>Nouveau tableau, MÊME taille</td></tr>
+        <tr><td><code>select</code></td><td>Garde les éléments dont le bloc est vrai</td><td>Nouveau tableau, taille ≤</td></tr>
+        <tr><td><code>reject</code></td><td>Élimine les éléments dont le bloc est vrai</td><td>Nouveau tableau, taille ≤</td></tr>
+        <tr><td><code>find</code></td><td>Renvoie le PREMIER élément qui matche</td><td>Un ÉLÉMENT, ou <code>nil</code></td></tr>
+        <tr><td><code>reduce(init)</code></td><td>Agrège tous les éléments en un seul</td><td>UNE valeur</td></tr>
+        <tr><td><code>each_slice(n)</code></td><td>Découpe en tranches de n éléments</td><td><code>Enumerator</code> (chaînable)</td></tr>
+        <tr><td><code>size</code> / <code>length</code></td><td>Nombre d'éléments ou de caractères</td><td><code>Integer</code></td></tr>
+        <tr><td><code>count</code> (Array)</td><td>Nombre d'éléments</td><td><code>Integer</code></td></tr>
+        <tr><td><code>count("l")</code> (String)</td><td>Occurrences des caractères donnés (argument OBLIGATOIRE)</td><td><code>Integer</code></td></tr>
+        <tr><td><code>yield</code></td><td>Exécute le bloc passé à la méthode</td><td>La valeur du bloc</td></tr>
+        <tr><td><code>even?</code> / <code>odd?</code></td><td>Teste la parité</td><td><code>true</code> / <code>false</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+
+    <details>
+      <summary>Que renvoie <code>[1, 2, 3].each { |n| n * 2 }</code> ?</summary>
+      <div class="ans"><code>[1, 2, 3]</code>. <code>each</code> renvoie toujours son receveur. Pour <code>[2, 4, 6]</code>, il fallait <code>map</code>.</div>
+    </details>
+
+    <details>
+      <summary>Pourquoi ne faut-il PAS écrire <code>select { |n| if n.even? }</code> ?</summary>
+      <div class="ans">Parce que <code>select</code> attend déjà un booléen. Le <code>if</code> est redondant et casse la valeur de retour du bloc. Il faut <code>select { |n| n.even? }</code>.</div>
+    </details>
+
+    <details>
+      <summary>Où déclarer un accumulateur, et pourquoi ?</summary>
+      <div class="ans">AVANT la boucle. Une variable créée dans le bloc meurt à la fermeture du bloc, elle ne survit ni aux tours suivants ni à l'après-boucle.</div>
+    </details>
+
+    <details>
+      <summary><code>"hello".count</code> : qu'est-ce qui se passe ?</summary>
+      <div class="ans"><code>ArgumentError</code>. Sur une <code>String</code>, <code>count</code> exige un argument. Pour la longueur, c'est <code>size</code> ou <code>length</code>.</div>
+    </details>
+
+    <details>
+      <summary>Quelle différence entre un argument et un attribut ?</summary>
+      <div class="ans">L'argument est passé à la méthode au moment de l'appel et vit le temps de l'appel. L'attribut appartient à l'objet et persiste entre les appels.</div>
+    </details>
+
+    <details>
+      <summary>À quoi sert <code>yield</code> ?</summary>
+      <div class="ans">À exécuter, à l'endroit où il est écrit, le bloc passé à la méthode par l'appelant.</div>
+    </details>
+  </section>
+
+  <footer>Priorité de révision : la VALEUR DE RETOUR de chaque itérateur (c'est le seul critère de choix). Rappel des deux réflexes fautifs du jour : itérer sur le nom de la méthode au lieu du paramètre, et glisser un <code>if</code> inutile dans un bloc <code>select</code>. Exercices non terminés : <code>size_splitter</code> et <code>block_splitter</code>.</footer>
+
+
+</div>
+</body>
+</html>

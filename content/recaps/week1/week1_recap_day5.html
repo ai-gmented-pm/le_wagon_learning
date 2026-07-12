@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap du jour - Le Wagon - 20260710</title>
+<style>
+  :root{
+    --paper:#fdfcf7;--ink:#1f2430;--muted:#6b7280;--line:#e7e3d6;
+    --accent:#c0562b;--spine:#8a3c1d;--concept:#2563a8;--trap:#b3341f;
+    --pattern:#2f7d54;--voc:#7a5cc0;--quiz:#a8781f;--code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5;}
+  .fiche{max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(var(--paper),var(--paper) 30px,#f5f2e8 31px);}
+  header{border-bottom:3px double var(--accent);padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 12px;
+    padding-left:12px;border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;border-left:4px solid var(--spine);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;border:1px solid #f0d9d3;
+    border-radius:6px;padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);padding-top:10px;color:var(--muted);
+    font-size:12px;font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon &middot; Camp 2319 &middot; Recap</div>
+    <h1>Recap du jour — Jour 5</h1>
+    <div class="meta">Vendredi 10 juillet 2026 · Hashes (<code>MENU</code>, <code>poor_calories_counter</code>), division euclidienne, portée des variables, duck typing.</div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Mes questions &amp; incompréhensions</h2>
+
+    <div class="qa">
+      <div class="q">« Un Hash, c'est un tableau ? »</div>
+      <div class="a">Non, et la différence tient à l'ADRESSE. Dans un <code>Array</code>, on accède par une position entière imposée par Ruby (<code>0, 1, 2...</code>). Dans un <code>Hash</code>, on accède par une CLÉ qu'on choisit soi-même (<code>"burger"</code>). L'Array répond à « le troisième », le Hash répond à « celui qui s'appelle X ».</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Les clés d'un Hash sont-elles uniques ? »</div>
+      <div class="a">Oui. Testé dans <code>irb</code> : <code>{ "a" =&gt; 1, "a" =&gt; 2 }</code> renvoie <code>{ "a" =&gt; 2 }</code>. La deuxième affectation écrase la première. Un Hash ne peut pas contenir deux fois la même clé.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>MENU</code> en majuscules, pourquoi ? »</div>
+      <div class="a">Convention Ruby : une variable écrite entièrement en MAJUSCULES est une CONSTANTE. Ce n'est pas cosmétique, c'est un contrat de lecture : « cette donnée ne change pas pendant l'exécution ». Le menu du restaurant en est un cas typique.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>MENU[burger]</code>, ça me renvoie quoi exactement ? »</div>
+      <div class="a">Le nombre de calories du burger, donc un <code>Integer</code>. La syntaxe crochets sur un Hash prend la clé et rend la VALEUR associée. C'est ce qui permet de faire <code>total += MENU[plat]</code> : on additionne bien des nombres, pas des noms de plats.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Le modulo <code>%</code>, ça sert à quoi en vrai ? »</div>
+      <div class="a">Il donne le RESTE d'une division euclidienne (<code>a = b × q + r</code>, avec <code>0 ≤ r &lt; b</code>). Usages concrets : tester la parité (<code>n % 2 == 0</code>), convertir des minutes en heures et minutes, distribuer équitablement, et surtout « boucler » sur un tableau : un compteur qui grandit indéfiniment, ramené par <code>% 3</code>, retombe toujours sur 0, 1, 2. C'est ce point-là qui m'avait échappé.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« <code>next_week</code> (la méthode) et <code>next_week_date</code> (la variable), pourquoi deux noms ? »</div>
+      <div class="a">Ce n'est PAS une règle Ruby, c'est une convention humaine pour ne pas se perdre. La méthode est le contenant, la variable locale vit à l'intérieur et disparaît quand la méthode se termine. Ruby, lui, ne confond rien : il cherche d'abord une variable locale de ce nom, puis une méthode. S'il ne trouve ni l'une ni l'autre, il lève un <code>NameError</code>.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">« Si mon paramètre s'appelle <code>number</code>, est-ce que je peux quand même lui passer un booléen ? »</div>
+      <div class="a">Oui, Ruby n'impose AUCUNE contrainte de type à la définition. C'est le duck typing : ce qui compte n'est pas le type déclaré, c'est la capacité de l'objet à répondre à l'opération. L'erreur ne survient qu'à l'exécution, au moment où on tente une opération que l'objet ne sait pas faire (<code>NoMethodError</code> ou <code>TypeError</code>). Ton intuition était juste : tout dépend de l'opération effectuée.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b>Hash : une donnée adressée par CLÉ</b>
+      <div class="why">Quand la position n'a aucun sens métier (le burger n'est pas « le plat n°2 »), il faut un Hash. On nomme la donnée au lieu de la numéroter, et le code devient auto-descriptif.</div>
+    </div>
+    <div class="card">
+      <b>Division euclidienne : quotient ET reste</b>
+      <div class="why"><code>/</code> donne le quotient (combien de fois ça rentre), <code>%</code> donne le reste (ce qui dépasse). Les deux ensemble décrivent toute division entière. Le reste est ce qui permet de « boucler », de tester la parité et de regrouper.</div>
+    </div>
+    <div class="card">
+      <b>Portée d'une variable locale</b>
+      <div class="why">Une variable locale n'existe QUE dans la méthode qui la crée, et disparaît quand la méthode rend la main. Elle n'est pas accessible depuis l'extérieur. Ce n'est pas une limitation, c'est ce qui rend les méthodes indépendantes les unes des autres.</div>
+    </div>
+    <div class="card">
+      <b>Duck typing</b>
+      <div class="why">Ruby ne vérifie pas les types au moment de la définition. Il essaie l'opération à l'exécution et échoue seulement si l'objet ne sait pas la faire. Corollaire : le nom d'un paramètre est une INDICATION pour l'humain, jamais une garantie pour la machine.</div>
+    </div>
+    <div class="card">
+      <b>Constante</b>
+      <div class="why">Nom en MAJUSCULES. Elle signale une donnée de référence, stable, définie une fois. Ruby autorise techniquement sa modification (avec un avertissement), mais la convention est un engagement fort de lisibilité.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>NameError: undefined local variable or method 'next_week_date'</code> hors de la méthode.</div>
+      <div><b>Cause :</b> la variable locale n'existe que dans la méthode qui l'a créée. Elle meurt au <code>end</code>.</div>
+      <div><b>Correctif :</b> récupérer la valeur de retour de la méthode : <code>resultat = next_week</code> <span class="cmt"># on capture ce que la méthode rend, on ne va pas fouiller dedans</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>uninitialized constant Date</code> en lançant le fichier seul.</div>
+      <div><b>Cause :</b> la classe <code>Date</code> n'est pas chargée par défaut.</div>
+      <div><b>Correctif :</b> ajouter <code>require "date"</code> en haut du fichier.</div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>MENU["burger"]</code> renvoie <code>nil</code>.</div>
+      <div><b>Cause :</b> la clé cherchée ne correspond pas exactement à la clé stockée (String contre Symbol, ou casse différente).</div>
+      <div><b>Correctif :</b> vérifier avec <code>MENU.keys</code> quelles clés existent réellement. <span class="cmt"># une clé absente ne lève pas d'erreur, elle rend nil : bug silencieux</span></div>
+    </div>
+
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>return</code> écrit systématiquement en fin de méthode.</div>
+      <div><b>Cause :</b> réflexe hérité d'autres langages. Ce n'est pas faux, mais ce n'est pas idiomatique en Ruby.</div>
+      <div><b>Correctif :</b> laisser la dernière expression parler. <span class="cmt"># retour implicite : Ruby renvoie la dernière expression évaluée</span></div>
+    </div>
+  </section>
+
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+
+    <pre><code>MENU = {                                      <span class="cmt"># constante : MAJUSCULES, donnée de référence stable</span>
+  "burger" =&gt; 500,                            <span class="cmt"># clé (String) =&gt; valeur (Integer, les calories)</span>
+  "salad" =&gt; 100,                             <span class="cmt"># chaque paire est séparée par une virgule</span>
+  "coke" =&gt; 150                               <span class="cmt"># pas de virgule après la dernière paire (facultatif mais propre)</span>
+}                                             <span class="cmt"># les accolades délimitent le Hash</span>
+
+def poor_calories_counter(order)              <span class="cmt"># "order" est un tableau de noms de plats</span>
+  total = 0                                   <span class="cmt"># accumulateur déclaré AVANT la boucle</span>
+  order.each do |plat|                        <span class="cmt"># on parcourt chaque nom de plat commandé</span>
+    total += MENU[plat]                       <span class="cmt"># MENU[plat] rend l'Integer des calories, qu'on additionne</span>
+  end                                         <span class="cmt"># fin du bloc : each renvoie order, on l'ignore</span>
+  total                                       <span class="cmt"># on renvoie l'accumulateur, pas le retour de each</span>
+end</code></pre>
+
+    <pre><code>require "date"                                <span class="cmt"># charge la classe Date : obligatoire en script autonome</span>
+
+def next_week                                 <span class="cmt"># méthode sans paramètre</span>
+  next_week_date = Date.today + 7             <span class="cmt"># variable LOCALE : elle n'existera que dans cette méthode</span>
+  next_week_date.strftime("%d/%m/%Y")         <span class="cmt"># strftime formate la date selon un motif : jour/mois/année</span>
+end                                           <span class="cmt"># retour implicite de la chaîne formatée ; next_week_date disparaît ici</span></code></pre>
+
+    <pre><code>17 / 5                                        <span class="cmt"># =&gt; 3   : le QUOTIENT (combien de fois 5 rentre dans 17)</span>
+17 % 5                                        <span class="cmt"># =&gt; 2   : le RESTE (ce qui dépasse)</span>
+n % 2 == 0                                    <span class="cmt"># teste la parité : reste nul en divisant par 2</span>
+
+couleurs = ["rouge", "vert", "bleu"]          <span class="cmt"># 3 éléments, donc index valides : 0, 1, 2</span>
+compteur = 7                                  <span class="cmt"># un compteur qui grandit indéfiniment</span>
+couleurs[compteur % 3]                        <span class="cmt"># 7 % 3 = 1 =&gt; "vert" : le modulo ramène TOUJOURS dans 0..2</span></code></pre>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>hash[cle]</code></td><td>Lit la valeur associée à la clé</td><td>La valeur, ou <code>nil</code> si la clé n'existe pas</td></tr>
+        <tr><td><code>hash[cle] = valeur</code></td><td>Ajoute ou remplace une paire</td><td>La valeur affectée</td></tr>
+        <tr><td><code>hash.key?(cle)</code></td><td>Teste la présence d'une clé</td><td><code>true</code> / <code>false</code></td></tr>
+        <tr><td><code>hash.keys</code></td><td>Liste les clés</td><td><code>Array</code></td></tr>
+        <tr><td><code>hash.values</code></td><td>Liste les valeurs</td><td><code>Array</code></td></tr>
+        <tr><td><code>hash.each</code></td><td>Parcourt les paires (bloc à deux variables : clé, valeur)</td><td>Le Hash de DÉPART</td></tr>
+        <tr><td><code>/</code></td><td>Division entière (quotient)</td><td><code>Integer</code></td></tr>
+        <tr><td><code>%</code></td><td>Reste de la division euclidienne (modulo)</td><td><code>Integer</code></td></tr>
+        <tr><td><code>Date.today + 7</code></td><td>Ajoute 7 jours à une date</td><td><code>Date</code></td></tr>
+        <tr><td><code>strftime("%d/%m/%Y")</code></td><td>Formate une date selon un motif</td><td><code>String</code></td></tr>
+        <tr><td><code>require "date"</code></td><td>Charge la bibliothèque Date</td><td><code>true</code> au premier chargement</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+
+    <details>
+      <summary>Que renvoie <code>{ "a" =&gt; 1, "a" =&gt; 2 }</code> ?</summary>
+      <div class="ans"><code>{ "a" =&gt; 2 }</code>. Les clés sont uniques, la seconde affectation écrase la première.</div>
+    </details>
+
+    <details>
+      <summary><code>MENU["poisson"]</code> alors que la clé n'existe pas : erreur ou pas ?</summary>
+      <div class="ans">Pas d'erreur : ça renvoie <code>nil</code>. C'est un bug silencieux, qui explosera plus loin (par exemple sur <code>total += nil</code>). D'où l'intérêt de <code>key?</code>.</div>
+    </details>
+
+    <details>
+      <summary>Pourquoi écrire <code>MENU</code> et pas <code>menu</code> ?</summary>
+      <div class="ans">Les MAJUSCULES signalent une constante en Ruby : une donnée de référence qui ne change pas pendant l'exécution.</div>
+    </details>
+
+    <details>
+      <summary>Un compteur vaut 7, mon tableau a 3 éléments. Comment retomber sur un index valide ?</summary>
+      <div class="ans"><code>compteur % 3</code>, soit <code>7 % 3 = 1</code>. Le modulo ramène toujours dans l'intervalle 0..2.</div>
+    </details>
+
+    <details>
+      <summary>Puis-je utiliser <code>next_week_date</code> après l'appel de la méthode <code>next_week</code> ?</summary>
+      <div class="ans">Non. C'est une variable locale : elle meurt au <code>end</code> de la méthode. Il faut capturer la valeur de RETOUR de la méthode.</div>
+    </details>
+
+    <details>
+      <summary>Ruby empêche-t-il de passer un booléen à un paramètre nommé <code>number</code> ?</summary>
+      <div class="ans">Non. Aucune contrainte de type à la définition (duck typing). L'erreur ne survient qu'à l'exécution, si l'objet ne sait pas répondre à l'opération demandée.</div>
+    </details>
+  </section>
+
+  <footer>Priorité de révision : Hash contre Array (adressage par clé contre position), le modulo comme mécanique de « wrap-around », et la portée des variables locales. À terminer : <code>size_splitter</code> et <code>block_splitter</code>. À venir : symbols, <code>.key?</code>, <code>.keys</code>, <code>.values</code>, <code>.each</code> sur les Hashes, puis la POO.</footer>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><!-- TITRE: Recap du jour - Le Wagon - Jour N --></title>
+<style>
+  :root{
+    --paper:#fdfcf7;        /* fond bristol crème */
+    --ink:#1f2430;          /* texte principal */
+    --muted:#6b7280;        /* texte secondaire */
+    --line:#e7e3d6;         /* filets de la fiche */
+    --accent:#c0562b;       /* orange brûlé, accent titres */
+    --spine:#8a3c1d;        /* section 1, colonne vertébrale */
+    --concept:#2563a8;      /* concepts */
+    --trap:#b3341f;         /* pièges */
+    --pattern:#2f7d54;      /* patterns/code */
+    --voc:#7a5cc0;          /* méthodes/vocabulaire */
+    --quiz:#a8781f;         /* auto-test */
+    --code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    line-height:1.5;
+  }
+  .fiche{
+    max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);
+    padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(
+      var(--paper),var(--paper) 30px,#f5f2e8 31px);
+  }
+  header{border-bottom:3px double var(--accent);
+    padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    letter-spacing:.14em;text-transform:uppercase;font-size:12px;
+    color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:16px;margin:0 0 12px;padding-left:12px;
+    border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+
+  /* Colonne vertébrale : cartes questions/incompréhensions */
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;
+    border-left:4px solid var(--spine);border-radius:6px;
+    padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+
+  .card{background:#fff;border:1px solid var(--line);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+
+  /* Piège en 3 temps */
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;
+    border:1px solid #f0d9d3;border-radius:6px;
+    padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+
+  pre{background:var(--code-bg);border:1px solid var(--line);
+    border-radius:6px;padding:12px 14px;overflow:auto;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);
+    vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px}
+
+  details{border:1px solid #ecdfc4;background:#fdf8ec;
+    border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+
+  footer{margin-top:30px;border-top:1px solid var(--line);
+    padding-top:10px;color:var(--muted);font-size:12px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon · Camp 2319 · Recap</div>
+    <h1><!-- TITRE COURT: Recap du jour — Jour N --></h1>
+    <div class="meta"><!-- DATE lisible + focus du jour en une ligne --></div>
+  </header>
+
+  <!-- SECTION 1 — OBLIGATOIRE : la colonne vertébrale -->
+  <section class="s-spine">
+    <h2>🧠 Mes questions &amp; incompréhensions</h2>
+    <!-- Pour chaque point : un bloc .qa -->
+    <div class="qa">
+      <div class="q"><!-- « la question telle que posée par Romain » --></div>
+      <div class="a"><!-- la réponse claire --></div>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b><!-- concept --></b>
+      <div class="why"><!-- le pourquoi, pas juste le quoi --></div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+    <div class="trap-row">
+      <div><b>Erreur :</b> <!-- l'erreur type --></div>
+      <div><b>Cause :</b> <!-- pourquoi ça casse --></div>
+      <div><b>Correctif :</b> <!-- ce qu'il faut faire --></div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 : code commenté LIGNE À LIGNE -->
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+    <pre><code><!-- ligne de code       <span class="cmt"># commentaire fr</span> --></code></pre>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code><!-- méthode --></code></td><td><!-- effet --></td><td><!-- retour --></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+    <details>
+      <summary><!-- question --></summary>
+      <div class="ans"><!-- réponse --></div>
+    </details>
+  </section>
+
+  <footer><!-- rappel : sticking points à revoir en priorité --></footer>
+
+</div>
+</body>
+</html>
