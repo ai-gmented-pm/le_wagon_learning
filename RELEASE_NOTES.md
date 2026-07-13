@@ -1,5 +1,13 @@
 # Release notes
 
+## v1.3.0 — 13 juillet 2026
+
+**Nouveau : les cheatsheets (`content/cheatsheets/`)**
+
+- `content/cheatsheets/week1/w1_ruby_basics_cheatsheet.html` : l'essentiel Ruby de la semaine 1 sur une page — types de données, variables et interpolation, conditions (`if`/`case`), boucles, méthodes (paramètres par défaut, retour implicite), CRUD Array/Hash côte à côte, tableaux des méthodes utiles à connaître par cœur.
+- Fichier HTML autonome, consultable **hors ligne**, imprimable (Cmd+P), exemples originaux rédigés pour la révision.
+- Rappels intégrés des pièges vus en semaine 1 (guillemets typographiques, `puts`/`return`, ordre des branches, `sort` vs `sort!`).
+
 ## v1.2.0 — 13 juillet 2026
 
 **Nouveau : le début de la semaine 2 (Regular Expressions, Parsing) + livecode du mercredi semaine 1**

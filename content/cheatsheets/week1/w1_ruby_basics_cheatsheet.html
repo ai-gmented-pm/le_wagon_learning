@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheatsheet — Ruby Basics — Semaine 1</title>
+<style>
+  :root{
+    --paper:#fdfcf7; --ink:#1f2430; --muted:#6b7280; --line:#e7e3d6;
+    --accent:#c0562b; --blue:#2563a8; --green:#2f7d54; --purple:#7a5cc0;
+    --gold:#a8781f; --red:#b3341f; --code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:28px;background:#eceae0;color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    line-height:1.45;font-size:14px}
+  .sheet{max-width:900px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);padding:30px 36px 38px}
+  header{border-bottom:3px double var(--accent);padding-bottom:12px;margin-bottom:6px}
+  .kicker{letter-spacing:.14em;text-transform:uppercase;font-size:11px;
+    color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:25px}
+  .meta{color:var(--muted);font-size:13px}
+  section{margin-top:24px}
+  h2{font-size:15px;margin:0 0 10px;padding-left:11px;
+    border-left:5px solid var(--accent);line-height:1.25}
+  .c-blue h2{border-color:var(--blue);color:var(--blue)}
+  .c-green h2{border-color:var(--green);color:var(--green)}
+  .c-purple h2{border-color:var(--purple);color:var(--purple)}
+  .c-gold h2{border-color:var(--gold);color:var(--gold)}
+  .c-red h2{border-color:var(--red);color:var(--red)}
+  h3{font-size:13px;margin:14px 0 6px;color:var(--ink)}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;
+    padding:10px 12px;overflow:auto;margin:8px 0;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:12.5px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+  th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+  @media (max-width:700px){.grid2{grid-template-columns:1fr}}
+  .tip{background:#fbf3ee;border:1px solid #f0dccf;border-left:4px solid var(--accent);
+    border-radius:6px;padding:9px 13px;margin:10px 0;font-size:13px}
+  footer{margin-top:26px;border-top:1px solid var(--line);padding-top:9px;
+    color:var(--muted);font-size:11.5px}
+  @media print{
+    body{background:#fff;padding:0;font-size:12px}
+    .sheet{box-shadow:none;border:none;max-width:none}
+    section{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="kicker">Le Wagon · Camp 2319 · Cheatsheet</div>
+    <h1>Ruby Basics — l'essentiel de la semaine 1</h1>
+    <div class="meta">Types, variables, conditions, boucles, méthodes, Array, Hash · fichier autonome, consultable hors ligne, imprimable (Cmd+P)</div>
+  </header>
+
+  <section class="c-blue">
+    <h2>1. Types de données</h2>
+    <table>
+      <thead><tr><th>Type</th><th>Exemples</th><th>À retenir</th></tr></thead>
+      <tbody>
+        <tr><td><code>String</code></td><td><code>"bonjour"</code>, <code>'wagon'</code></td><td>guillemets doubles = interpolation possible</td></tr>
+        <tr><td><code>Integer</code></td><td><code>42</code>, <code>-7</code></td><td>division entière : <code>7 / 2 =&gt; 3</code></td></tr>
+        <tr><td><code>Float</code></td><td><code>3.14</code>, <code>19.99</code></td><td><code>7 / 2.0 =&gt; 3.5</code> (un Float contamine le calcul)</td></tr>
+        <tr><td><code>Range</code></td><td><code>(1..5)</code>, <code>(1...5)</code></td><td>2 points : 5 inclus · 3 points : 5 exclu</td></tr>
+        <tr><td><code>Boolean</code></td><td><code>true</code>, <code>false</code></td><td>seuls <code>false</code> et <code>nil</code> sont falsy</td></tr>
+        <tr><td><code>Array</code></td><td><code>[1, 2, 3]</code>, <code>%w[a b c]</code></td><td>accès par POSITION (index depuis 0)</td></tr>
+        <tr><td><code>Hash</code></td><td><code>{ "clef" =&gt; 1 }</code>, <code>{ nom: "Zoé" }</code></td><td>accès par CLÉ choisie</td></tr>
+        <tr><td><code>Symbol</code></td><td><code>:pseudo</code></td><td>étiquette immuable, idéale en clé de Hash</td></tr>
+        <tr><td><code>Nil</code></td><td><code>nil</code></td><td>« rien » ; ce que renvoie <code>puts</code> !</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="c-green">
+    <h2>2. Variables, interpolation, incrémentation</h2>
+    <div class="grid2">
+      <div>
+        <h3>Affectation et conventions</h3>
+        <pre><code>score = 0            <span class="cmt"># = AFFECTE (== compare)</span>
+prenom = "Zoé"       <span class="cmt"># snake_case pour les variables</span>
+TVA = 0.20           <span class="cmt"># MAJUSCULES = constante</span></code></pre>
+        <h3>Incrémentation (pas de ++ en Ruby)</h3>
+        <pre><code>score = score + 1    <span class="cmt"># version longue</span>
+score += 1           <span class="cmt"># raccourci idiomatique</span>
+score -= 2           <span class="cmt"># existe aussi en -, *, /</span></code></pre>
+      </div>
+      <div>
+        <h3>Interpolation (guillemets DOUBLES)</h3>
+        <pre><code>age = 30
+puts "j'ai #{age} ans"       <span class="cmt"># -&gt; j'ai 30 ans</span>
+puts 'j\'ai #{age} ans'      <span class="cmt"># simples : PAS interprété</span>
+puts "dans 10 ans : #{age + 10}" <span class="cmt"># toute expression marche</span></code></pre>
+        <div class="tip">💡 Piège vécu en S1 : les guillemets courbes “ ” collés depuis un doc externe cassent la syntaxe. Toujours des guillemets droits <code>"</code>.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-purple">
+    <h2>3. Conditions</h2>
+    <div class="grid2">
+      <div>
+        <h3>if / elsif / else</h3>
+        <pre><code>if note &gt;= 16
+  puts "mention bien"
+elsif note &gt;= 10       <span class="cmt"># elsif, JAMAIS elseif</span>
+  puts "admis"
+else
+  puts "rattrapage"
+end</code></pre>
+        <h3>Sur une ligne + unless</h3>
+        <pre><code>puts "gagné" if score &gt; 100
+puts "silence" unless volume &gt; 0 <span class="cmt"># unless = if not</span></code></pre>
+      </div>
+      <div>
+        <h3>case / when</h3>
+        <pre><code>case meteo
+when "soleil"
+  puts "terrasse"
+when "pluie", "orage"    <span class="cmt"># plusieurs valeurs par when</span>
+  puts "capuche"
+else
+  puts "on verra"
+end</code></pre>
+        <div class="tip">⚠️ L'ordre des branches compte : le cas PARTICULIER se teste avant le cas général (piège du jour 3).</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-gold">
+    <h2>4. Boucles</h2>
+    <div class="grid2">
+      <div>
+        <pre><code>while stock &gt; 0          <span class="cmt"># tourne TANT QUE c'est vrai</span>
+  stock -= 1
+end
+
+until panier_plein        <span class="cmt"># tourne JUSQU'À ce que ce soit vrai</span>
+  panier &lt;&lt; produit
+end</code></pre>
+      </div>
+      <div>
+        <pre><code>3.times { puts "hip" }    <span class="cmt"># répéter N fois</span>
+
+(1..5).each do |n|        <span class="cmt"># itérer sur un Range</span>
+  puts n * n
+end
+
+invites.each do |invite|  <span class="cmt"># LA façon d'itérer un Array en Ruby</span>
+  puts "Bienvenue #{invite} !"
+end</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-red">
+    <h2>5. Méthodes</h2>
+    <div class="grid2">
+      <div>
+        <pre><code><span class="cmt"># def + snake_case ; parenthèses pour les paramètres</span>
+def prix_ttc(prix_ht, taux = 0.20)  <span class="cmt"># taux a une valeur PAR DÉFAUT</span>
+  prix_ht * (1 + taux)   <span class="cmt"># dernière expression évaluée = RETOUR IMPLICITE</span>
+end
+
+puts prix_ttc(100)        <span class="cmt"># -&gt; 120.0 (le défaut s'applique)</span>
+puts prix_ttc(100, 0.055) <span class="cmt"># -&gt; 105.5 (argument fourni)</span></code></pre>
+      </div>
+      <div>
+        <div class="tip"><b>Le trio à ne plus confondre :</b><br>
+        · <code>puts</code> AFFICHE pour l'humain et renvoie <code>nil</code><br>
+        · <code>return</code> TRANSMET une valeur au code appelant<br>
+        · sans <code>return</code>, Ruby renvoie la dernière expression évaluée<br>
+        Un test lit la VALEUR DE RETOUR, jamais l'écran.</div>
+        <div class="tip"><b>Argument vs paramètre :</b> le paramètre est le nom déclaré dans le <code>def</code> ; l'argument est la valeur passée à l'appel.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="c-blue">
+    <h2>6. Array &amp; Hash : le CRUD côte à côte</h2>
+    <table>
+      <thead><tr><th>Action</th><th>Array (par position)</th><th>Hash (par clé)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Create</b></td><td><code>plats &lt;&lt; "gratin"</code></td><td><code>stock["pommes"] = 12</code></td></tr>
+        <tr><td><b>Read</b></td><td><code>plats[0]</code> · <code>plats.first</code> · <code>plats[-1]</code> (dernier)</td><td><code>stock["pommes"]</code> · <code>stock.fetch("poires", 0)</code></td></tr>
+        <tr><td><b>Update</b></td><td><code>plats[1] = "soupe"</code></td><td><code>stock["pommes"] = 9</code> (même syntaxe que Create)</td></tr>
+        <tr><td><b>Delete</b></td><td><code>plats.delete_at(2)</code> · <code>plats.delete("soupe")</code></td><td><code>stock.delete("pommes")</code></td></tr>
+        <tr><td><b>Itérer</b></td><td><code>plats.each { |plat| ... }</code></td><td><code>stock.each { |fruit, qte| ... }</code> (2 variables de bloc)</td></tr>
+      </tbody>
+    </table>
+    <pre><code><span class="cmt"># Hash imbriqué : la structure reine des données réelles</span>
+camp = {
+  "ville"     =&gt; "Lyon",
+  "effectif"  =&gt; 24,
+  "langages"  =&gt; ["Ruby", "JavaScript"]   <span class="cmt"># un Array DANS un Hash</span>
+}
+puts camp["langages"].first               <span class="cmt"># on chaîne les accès -&gt; "Ruby"</span></code></pre>
+  </section>
+
+  <section class="c-green">
+    <h2>7. Méthodes utiles à connaître par cœur</h2>
+    <div class="grid2">
+      <div>
+        <h3>String</h3>
+        <table>
+          <tbody>
+            <tr><td><code>.length</code></td><td>nombre de caractères</td></tr>
+            <tr><td><code>.upcase</code> / <code>.downcase</code></td><td>tout en MAJ / min</td></tr>
+            <tr><td><code>.capitalize</code></td><td>1re lettre en majuscule, le reste en min</td></tr>
+            <tr><td><code>.strip</code></td><td>retire les espaces autour</td></tr>
+            <tr><td><code>.split</code></td><td>String → Array de mots</td></tr>
+            <tr><td><code>.include?("x")</code></td><td>présence d'une sous-chaîne → booléen</td></tr>
+            <tr><td><code>.gsub("a", "b")</code></td><td>remplace toutes les occurrences</td></tr>
+            <tr><td><code>.to_i</code> / <code>.to_f</code></td><td>conversion en Integer / Float</td></tr>
+          </tbody>
+        </table>
+        <h3>Integer / Float</h3>
+        <table>
+          <tbody>
+            <tr><td><code>.odd?</code> / <code>.even?</code></td><td>impair / pair → booléen</td></tr>
+            <tr><td><code>17 % 5</code></td><td>modulo (reste) → <code>2</code></td></tr>
+            <tr><td><code>.round(2)</code></td><td>arrondi (2 décimales)</td></tr>
+            <tr><td><code>.to_s</code></td><td>conversion en String</td></tr>
+            <tr><td><code>rand(1..6)</code></td><td>entier aléatoire (dé à 6 faces)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Array</h3>
+        <table>
+          <tbody>
+            <tr><td><code>.size</code> / <code>.count</code></td><td>nombre d'éléments</td></tr>
+            <tr><td><code>.first</code> / <code>.last</code></td><td>premier / dernier</td></tr>
+            <tr><td><code>.empty?</code></td><td>vide ? → booléen</td></tr>
+            <tr><td><code>.include?(x)</code></td><td>présence d'un élément → booléen</td></tr>
+            <tr><td><code>.sort</code></td><td>copie triée (<code>.sort!</code> MUTE l'original)</td></tr>
+            <tr><td><code>.sample</code></td><td>un élément au hasard</td></tr>
+            <tr><td><code>.sum</code> / <code>.min</code> / <code>.max</code></td><td>agrégats</td></tr>
+            <tr><td><code>.each_with_index</code></td><td>élément + position dans le bloc</td></tr>
+            <tr><td><code>.join(", ")</code></td><td>Array → String</td></tr>
+          </tbody>
+        </table>
+        <h3>Hash</h3>
+        <table>
+          <tbody>
+            <tr><td><code>.keys</code> / <code>.values</code></td><td>Array des clés / des valeurs</td></tr>
+            <tr><td><code>.key?("x")</code></td><td>la clé existe ? → booléen</td></tr>
+            <tr><td><code>.size</code></td><td>nombre de paires</td></tr>
+          </tbody>
+        </table>
+        <div class="tip">💡 Les méthodes finissant par <code>?</code> renvoient un booléen ; celles finissant par <code>!</code> MODIFIENT l'objet (à manier avec précaution).</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Semaine 1 · Camp 2319 · Cheatsheet personnelle : exemples originaux rédigés pour la révision · S'utilise avec les recaps quotidiens et les flashcards du repo.</footer>
+
+</div>
+</body>
+</html>
