@@ -1,5 +1,18 @@
 # Release notes
 
+## v1.2.0 — 13 juillet 2026
+
+**Nouveau : le début de la semaine 2 (Regular Expressions, Parsing) + livecode du mercredi semaine 1**
+
+Contenu **généraliste** pour la semaine 2 : bâti sur les cours, sans session de chat (contrairement à la semaine 1, personnalisée sur les sessions réelles).
+
+- `content/recaps/week2/` : 2 fiches recap — jour 1 Regular Expressions (13/07), jour 2 Parsing (14/07). Questions clés, concepts, pièges, patterns commentés ligne à ligne, méthodes, auto-test.
+- `content/flashcards/week2/` : 2 decks de 35 cartes (regex et parsing), dosage 40 % cœur / 31 % pièges / 20 % livecode / 9 % rappel semaine 1, hors ligne comme toujours.
+- `content/livecode_with_comments/week1/20260708_acronymize.rb` : la version each + accumulateur du mercredi, commentée ligne à ligne et testée.
+- `content/livecode_with_comments/week2/` : 2 implémentations de référence commentées ligne à ligne, toutes deux exécutées avec succès —
+  - `20260713_url_parser.rb` : regex longue en mode étendu, groupes nommés, parsing de query string ;
+  - `20260714_movies_scraper.rb` : open-uri + Nokogiri + YAML, cycle complet parsing → storing.
+
 ## v1.1.0 — 13 juillet 2026
 
 **Nouveau : les livecodes commentés (`content/livecode_with_comments/`)**

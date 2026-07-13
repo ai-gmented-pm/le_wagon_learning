@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap du jour — Le Wagon — Semaine 2 Jour 1 · Regular Expressions</title>
+<style>
+  :root{
+    --paper:#fdfcf7;        /* fond bristol crème */
+    --ink:#1f2430;          /* texte principal */
+    --muted:#6b7280;        /* texte secondaire */
+    --line:#e7e3d6;         /* filets de la fiche */
+    --accent:#c0562b;       /* orange brûlé, accent titres */
+    --spine:#8a3c1d;        /* section 1, colonne vertébrale */
+    --concept:#2563a8;      /* concepts */
+    --trap:#b3341f;         /* pièges */
+    --pattern:#2f7d54;      /* patterns/code */
+    --voc:#7a5cc0;          /* méthodes/vocabulaire */
+    --quiz:#a8781f;         /* auto-test */
+    --code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    line-height:1.5;
+  }
+  .fiche{
+    max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);
+    padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(
+      var(--paper),var(--paper) 30px,#f5f2e8 31px);
+  }
+  header{border-bottom:3px double var(--accent);
+    padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    letter-spacing:.14em;text-transform:uppercase;font-size:12px;
+    color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:16px;margin:0 0 12px;padding-left:12px;
+    border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;
+    border-left:4px solid var(--spine);border-radius:6px;
+    padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;
+    border:1px solid #f0d9d3;border-radius:6px;
+    padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);
+    border-radius:6px;padding:12px 14px;overflow:auto;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);
+    vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;
+    border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);
+    padding-top:10px;color:var(--muted);font-size:12px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{
+    body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon · Camp 2319 · Recap</div>
+    <h1>Recap du jour — Semaine 2, Jour 1</h1>
+    <div class="meta">Lundi 13 juillet 2026 · Regular Expressions (regex) · <b>fiche généraliste</b> : bâtie sur le cours, sans session de chat ce jour</div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Questions clés du jour</h2>
+    <div class="qa">
+      <div class="q">« Une regex, ça sert à quoi concrètement ? »</div>
+      <div class="a">À deux choses : <b>valider</b> qu'une chaîne respecte un format (un e-mail, un numéro de téléphone, un code postal) et <b>extraire</b> des morceaux précis d'un texte (récupérer le domaine d'une URL, les nombres d'un paragraphe). C'est une syntaxe compacte pour décrire un MOTIF de texte.</div>
+    </div>
+    <div class="qa">
+      <div class="q">« Quelle différence entre <code>match</code>, <code>match?</code> et <code>=~</code> ? »</div>
+      <div class="a">Trois réponses de nature différente pour la même question « ça matche ? » : <code>match?</code> renvoie un booléen (<code>true</code>/<code>false</code>), parfait pour un <code>if</code>. <code>match</code> renvoie un objet <code>MatchData</code> (ou <code>nil</code>), indispensable pour EXTRAIRE les groupes capturés. <code>=~</code> renvoie l'index de la première correspondance (ou <code>nil</code>).</div>
+    </div>
+    <div class="qa">
+      <div class="q">« Pourquoi ma regex accepte des chaînes visiblement fausses ? »</div>
+      <div class="a">Presque toujours un problème d'<b>ancres</b>. Sans <code>^</code> (début) et <code>$</code> (fin), la regex cherche le motif QUELQUE PART dans la chaîne : <code>"abc123xyz"</code> matche <code>/\d{3}/</code>. Avec <code>/^\d{3}$/</code>, la chaîne entière doit être exactement trois chiffres.</div>
+    </div>
+    <div class="qa">
+      <div class="q">« Comment je récupère un morceau précis de la chaîne, pas juste oui/non ? »</div>
+      <div class="a">Avec les <b>groupes de capture</b> : des parenthèses dans le motif. <code>(?&lt;annee&gt;\d{4})</code> est un groupe NOMMÉ : on relit ensuite <code>match_data[:annee]</code> comme dans un Hash. C'est exactement le mécanisme du livecode URL Parser.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b>La regex est un objet Ruby à part entière (classe <code>Regexp</code>)</b>
+      <div class="why">On l'écrit entre slashes <code>/motif/</code> (ou <code>%r{motif}</code> quand le motif contient des <code>/</code>). Comme tout objet, elle a ses méthodes : c'est pour ça qu'on peut écrire aussi bien <code>regex.match(string)</code> que <code>string.match(regex)</code>.</div>
+    </div>
+    <div class="card">
+      <b>Classes de caractères : décrire « quel genre de caractère » attendre</b>
+      <div class="why"><code>\d</code> un chiffre, <code>\w</code> un caractère alphanumérique, <code>\s</code> un espace/tabulation, <code>.</code> n'importe quel caractère, <code>[aeiou]</code> un caractère de la liste, <code>[^a-z]</code> tout SAUF une minuscule. Le crochet définit un ensemble, le chapeau à l'intérieur du crochet inverse l'ensemble.</div>
+    </div>
+    <div class="card">
+      <b>Quantificateurs : dire « combien de fois »</b>
+      <div class="why"><code>?</code> zéro ou une fois, <code>*</code> zéro ou plus, <code>+</code> une ou plus, <code>{2,4}</code> entre deux et quatre fois. Ils s'appliquent à l'élément qui les précède : <code>/ab+c/</code> répète le <code>b</code>, pas <code>ab</code> (pour répéter un groupe, on l'entoure de parenthèses : <code>/(ab)+c/</code>).</div>
+    </div>
+    <div class="card">
+      <b>Ancres et frontières : positionner le motif</b>
+      <div class="why"><code>^</code> début de chaîne, <code>$</code> fin de chaîne, <code>\b</code> frontière de mot. La regex de validation sans ancres est le bug le plus discret de la journée : elle dit « présent quelque part » au lieu de « conforme du début à la fin ».</div>
+    </div>
+    <div class="card">
+      <b>Modificateurs (flags) après le slash fermant</b>
+      <div class="why"><code>/bonjour/i</code> ignore la casse (matche Bonjour, BONJOUR…). <code>/m</code> permet au <code>.</code> de matcher aussi les retours à la ligne. Le flag change le comportement GLOBAL du motif sans toucher au motif lui-même.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+    <div class="trap-row">
+      <div><b>Erreur :</b> valider un format avec <code>/\d{5}/</code> et accepter <code>"abc12345xyz"</code>.</div>
+      <div><b>Cause :</b> sans ancres, la regex cherche une correspondance PARTIELLE n'importe où dans la chaîne.</div>
+      <div><b>Correctif :</b> ancrer les deux bouts : <code>/^\d{5}$/</code> (la chaîne entière est exactement cinq chiffres).</div>
+    </div>
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>/www.exemple.org/</code> matche aussi <code>"wwwXexempleYorg"</code>.</div>
+      <div><b>Cause :</b> le point nu <code>.</code> signifie « n'importe quel caractère », pas le caractère point.</div>
+      <div><b>Correctif :</b> échapper le point quand on veut un vrai point : <code>/www\.exemple\.org/</code>.</div>
+    </div>
+    <div class="trap-row">
+      <div><b>Erreur :</b> utiliser <code>if texte =~ /motif/ == true</code> et ne jamais entrer dans le if.</div>
+      <div><b>Cause :</b> <code>=~</code> renvoie un INDEX (un Integer) ou <code>nil</code>, jamais <code>true</code>. Comparer un index à <code>true</code> est toujours faux.</div>
+      <div><b>Correctif :</b> soit <code>if texte =~ /motif/</code> tout court (un Integer est truthy), soit <code>if texte.match?(/motif/)</code> qui renvoie un vrai booléen.</div>
+    </div>
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>"a-b-c-d".match(/^(.*)-/)[1]</code> renvoie <code>"a-b-c"</code> au lieu de <code>"a"</code>.</div>
+      <div><b>Cause :</b> les quantificateurs sont GOURMANDS (greedy) : <code>.*</code> avale le maximum possible avant de céder du terrain.</div>
+      <div><b>Correctif :</b> version non gourmande avec <code>?</code> : <code>/^(.*?)-/</code> s'arrête à la première correspondance possible.</div>
+    </div>
+  </section>
+
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+    <pre><code>numero = "06 12 34 56 78"                      <span class="cmt"># la chaîne à valider (numéro FR à 5 blocs)</span>
+FORMAT_FR = /^0[1-9]( \d{2}){4}$/               <span class="cmt"># ^ et $ : la chaîne ENTIÈRE ; 0 puis un chiffre 1-9 ; puis 4 fois « espace + 2 chiffres »</span>
+puts numero.match?(FORMAT_FR)                   <span class="cmt"># match? renvoie true/false : idéal pour la validation</span>
+
+fichier = "recap_20260713_v02.html"             <span class="cmt"># extraction : on veut la date et la version</span>
+motif = /^recap_(?&lt;date&gt;\d{8})_v(?&lt;version&gt;\d{2})/ <span class="cmt"># deux groupes NOMMÉS : (?&lt;nom&gt;...)</span>
+md = fichier.match(motif)                       <span class="cmt"># match renvoie un MatchData (ou nil si pas de correspondance)</span>
+puts md[:date]                                  <span class="cmt"># accès par nom, comme un Hash -&gt; "20260713"</span>
+puts md[:version]                               <span class="cmt"># -&gt; "02"</span>
+
+phrase = "le chat et le chien"                  <span class="cmt"># remplacement global</span>
+puts phrase.gsub(/le /, "un ")                  <span class="cmt"># gsub remplace TOUTES les occurrences -&gt; "un chat et un chien"</span>
+
+texte = "commande 42, commande 7, commande 108" <span class="cmt"># collecter toutes les correspondances</span>
+p texte.scan(/\d+/)                             <span class="cmt"># scan renvoie un Array de tous les matches -&gt; ["42", "7", "108"] (des String !)</span></code></pre>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>match?</code></td><td>teste si la chaîne correspond au motif</td><td><code>true</code> / <code>false</code></td></tr>
+        <tr><td><code>match</code></td><td>confronte la chaîne au motif et capture les groupes</td><td><code>MatchData</code> ou <code>nil</code></td></tr>
+        <tr><td><code>=~</code></td><td>cherche le motif dans la chaîne</td><td>index (Integer) ou <code>nil</code></td></tr>
+        <tr><td><code>scan</code></td><td>collecte TOUTES les correspondances</td><td>Array de String (ou d'Array si groupes)</td></tr>
+        <tr><td><code>gsub</code></td><td>remplace toutes les occurrences du motif</td><td>nouvelle String</td></tr>
+        <tr><td><code>sub</code></td><td>remplace la PREMIÈRE occurrence seulement</td><td>nouvelle String</td></tr>
+        <tr><td><code>md[:nom]</code></td><td>lit un groupe nommé dans un MatchData</td><td>String capturée ou <code>nil</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+    <details>
+      <summary>Que renvoie <code>"wagon".match?(/^w\w+n$/)</code> et pourquoi ?</summary>
+      <div class="ans"><code>true</code> : la chaîne commence par <code>w</code> (<code>^w</code>), enchaîne un ou plusieurs caractères alphanumériques (<code>\w+</code> : « agо »), et finit par <code>n</code> (<code>n$</code>).</div>
+    </details>
+    <details>
+      <summary>Quelle est la différence entre <code>/\d*/</code> et <code>/\d+/</code> ?</summary>
+      <div class="ans"><code>*</code> accepte ZÉRO occurrence ou plus (matche même la chaîne vide), <code>+</code> exige AU MOINS une occurrence. Pour valider une saisie numérique, c'est presque toujours <code>+</code> qu'on veut.</div>
+    </details>
+    <details>
+      <summary>Comment capturer l'année dans <code>"sortie: 2026"</code> avec un groupe nommé ?</summary>
+      <div class="ans"><code>md = "sortie: 2026".match(/(?&lt;annee&gt;\d{4})/)</code> puis <code>md[:annee]</code> qui vaut <code>"2026"</code>. Attention : c'est une String, pas un Integer (<code>.to_i</code> si besoin de calculer).</div>
+    </details>
+    <details>
+      <summary><code>gsub</code> ou <code>sub</code> pour anonymiser TOUS les prénoms d'un texte ?</summary>
+      <div class="ans"><code>gsub</code> (g comme global) : <code>sub</code> ne remplacerait que la première occurrence. Les deux renvoient une NOUVELLE chaîne, l'originale n'est pas modifiée.</div>
+    </details>
+    <details>
+      <summary>Pourquoi valider un e-mail avec <code>/@/</code> est insuffisant, et que faut-il au minimum ?</summary>
+      <div class="ans"><code>/@/</code> dit seulement « il y a un @ quelque part » : <code>"@@@"</code> passe. Il faut au minimum ancrer et structurer : quelque chose comme <code>/^[\w.+-]+@[\w-]+\.[a-z]{2,}$/i</code> (une partie locale, un @, un domaine, un point, un TLD).</div>
+    </details>
+  </section>
+
+  <footer>Fiche généraliste (pas de session de chat ce jour) · À réviser en priorité : ancres <code>^ $</code> systématiques en validation, différence <code>match</code> / <code>match?</code> / <code>=~</code>, groupes nommés · Livecode du jour : URL Parser (voir <code>livecode_with_comments/week2</code>).</footer>
+
+</div>
+</body>
+</html>

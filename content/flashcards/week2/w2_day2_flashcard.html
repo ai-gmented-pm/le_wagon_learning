@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards — Parsing</title>
+<style>
+  :root{--bg:#f4f5f7;--card:#fff;--accent:#B40A00;--ink:#1f2430;--muted:#6b7280;--code:#f6f8fa;--ok:#16a34a;--ko:#dc2626;
+        --coeur:#2563eb;--faible:#B40A00;--challenge:#b45309;--rappel:#7c3aed;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+  header{text-align:center;margin-bottom:8px}
+  header h1{font-size:20px;margin:0;color:var(--accent)}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .progress{width:100%;max-width:680px;height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:14px 0 6px}
+  .progress-bar{height:100%;background:var(--ok);width:0;transition:width .25s}
+  .counter{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center}
+  .counter b{color:var(--ink)}
+  .scene{width:100%;max-width:680px;perspective:1600px}
+  .card{position:relative;width:100%;min-height:380px;transform-style:preserve-3d;transition:transform .5s}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:28px;display:flex;flex-direction:column;overflow:auto}
+  .face .tag{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{border-radius:99px;padding:2px 9px;color:#fff;font-size:10px;letter-spacing:.4px}
+  .pill.coeur{background:var(--coeur)} .pill.faible{background:var(--faible)}
+  .pill.challenge{background:var(--challenge)} .pill.rappel{background:var(--rappel)}
+  .front .question{font-size:18px;font-weight:600;line-height:1.5}
+  .back{transform:rotateY(180deg)}
+  .back .content{font-size:15px;line-height:1.6}
+  textarea{width:100%;margin-top:auto;min-height:90px;border:1px solid #d1d5db;border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .guessed{margin-top:14px;background:var(--code);border-left:3px solid var(--muted);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+  .guessed b{color:var(--ink)}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.9em;font-family:SFMono-Regular,Consolas,monospace}
+  pre{background:#0d1117;color:#e6edf3;padding:14px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5}
+  pre code{background:none;padding:0;color:inherit}
+  .content p{margin:0 0 10px}
+  .why{font-size:13px;color:var(--muted);border-top:1px dashed #e5e7eb;padding-top:10px;margin-top:6px}
+  .selfeval{display:flex;gap:10px;margin-top:auto;padding-top:14px}
+  .controls{display:flex;gap:10px;margin-top:20px;width:100%;max-width:680px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;border:none;border-radius:9px;padding:11px 18px;cursor:pointer;font-weight:600;font-size:14px}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .btn-ok{background:var(--ok);color:#fff;flex:1}
+  .btn-ko{background:var(--ko);color:#fff;flex:1}
+  button:disabled{opacity:.4;cursor:default}
+  .recap{width:100%;max-width:680px;margin-top:26px;background:#fff;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px}
+  .recap h2{font-size:15px;margin:0 0 12px;color:var(--accent)}
+  .recap h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 0 8px}
+  .recap ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65}
+  .bars{display:flex;flex-direction:column;gap:6px;font-size:13px}
+  .bars div{display:flex;align-items:center;gap:8px}
+  .bars .b{height:8px;border-radius:99px}
+  #revoir{font-size:13.5px;line-height:1.6}
+  footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;max-width:680px}
+  kbd{background:#fff;border:1px solid #d1d5db;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:11px;font-family:inherit}
+</style>
+</head>
+<body>
+<header>
+  <h1>Flashcards — Parsing</h1>
+  <p>Le Wagon · Batch 2319 · 14 juillet 2026 · set généraliste (sans session de chat)</p>
+</header>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div class="counter" id="counter"></div>
+
+<div class="scene"><div class="card" id="card">
+  <div class="face front">
+    <div class="tag" id="tagFront"></div>
+    <div class="question" id="question"></div>
+    <textarea id="answer" placeholder="Écris ta réponse ici, puis alt + entrée pour retourner la carte…"></textarea>
+  </div>
+  <div class="face back">
+    <div class="tag">Réponse</div>
+    <div class="content" id="back"></div>
+    <div class="guessed" id="guessed"></div>
+    <div class="selfeval">
+      <button class="btn-ko" id="ko">✗ Did not know</button>
+      <button class="btn-ok" id="ok">✓ I knew it!</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="controls">
+  <button class="btn-ghost" id="prev">← Précédent</button>
+  <button class="btn-ghost" id="flip">Flip card</button>
+  <button class="btn-ghost" id="shuffle">Mélanger</button>
+  <button class="btn-primary" id="next">Suivant →</button>
+</div>
+
+<div class="recap">
+  <h2>Récapitulatif du set</h2>
+  <h3>Répartition réelle</h3>
+  <div class="bars" id="bars"></div>
+  <h3>Difficultés personnelles couvertes</h3>
+  <ul id="diffs"></ul>
+  <h3>À revoir demain (cartes « Did not know »)</h3>
+  <div id="revoir">Aucune carte marquée pour l'instant.</div>
+</div>
+
+<footer>
+  <kbd>←</kbd> <kbd>→</kbd> naviguer · <kbd>alt + ⏎</kbd> retourner · <kbd>S</kbd> mélanger · <kbd>1</kbd> did not know · <kbd>2</kbd> I knew it<br>
+  35 cartes · usage personnel · contenu © Le Wagon.
+</footer>
+
+<script>
+const DECK = [{"bloc": "coeur", "type": "Vocabulaire", "q": "« Parser », ça veut dire quoi exactement ?", "a": "<p>Transformer un TEXTE structuré (le contenu d'un fichier CSV, JSON, XML : de simples String) en <b>objets Ruby manipulables</b> : Array, Hash, document Nokogiri.</p>"}, {"bloc": "coeur", "type": "Différence", "q": "Parsing vs storing : dans quel sens va chacun ?", "a": "<p>Parsing : fichier → objets Ruby (LIRE). Storing : objets Ruby → fichier (ÉCRIRE).</p><div class='why'>Un programme complet fait souvent l'aller-retour : lire, transformer, sauvegarder.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment lire un CSV qui a une ligne d'en-tête ?", "a": "<pre><code>require \"csv\"\nCSV.foreach(\"livres.csv\", headers: true) do |row|\n  puts row[\"titre\"]  # accès par NOM de colonne\nend</code></pre>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Dans un CSV parsé, quel est le TYPE de <code>row[\"annee\"]</code> qui vaut 1969 ?", "a": "<p>Une <b>String</b> : <code>\"1969\"</code>. Un CSV ne contient que du texte.</p><div class='why'><code>row[\"annee\"].to_i</code> avant tout calcul.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment transformer une String JSON en objets Ruby ?", "a": "<pre><code>require \"json\"\ndata = JSON.parse(json_string)  # =&gt; Hash (ou Array)</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>JSON.parse</code> vs <code>JSON.generate</code> ?", "a": "<p><code>parse</code> : String JSON → objets Ruby (lecture). <code>generate</code> : objets Ruby → String JSON (écriture).</p><div class='why'>Les deux sens de la journée : parsing et storing.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Consommer une API JSON du web (téléchargement + parsing) :", "a": "<pre><code>require \"json\"\nrequire \"open-uri\"\ndata = JSON.parse(URI.open(url).read, symbolize_names: true)</code></pre><p>Télécharger (<code>URI.open</code>), lire (<code>.read</code>), parser (<code>JSON.parse</code>).</p>"}, {"bloc": "coeur", "type": "Vocabulaire", "q": "Que fait l'option <code>symbolize_names: true</code> de <code>JSON.parse</code> ?", "a": "<p>Elle convertit les clés du JSON en <b>Symbols</b> : on écrit <code>data[:titre]</code> au lieu de <code>data[\"titre\"]</code>.</p><div class='why'>Convention Ruby : les Symbols pour les clés de Hash.</div>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "Quelle est la meilleure façon d'écrire dans un fichier sans risquer de le laisser ouvert ?", "a": "<pre><code>File.open(\"sortie.json\", \"wb\") do |file|\n  file.write(contenu)\nend  # le fichier est refermé automatiquement à la fin du bloc</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "Après parsing, quelle structure Ruby obtient-on d'un CSV ? d'un JSON ? d'un XML ?", "a": "<p>CSV → des lignes à accumuler en <b>Array</b> ; JSON → <b>Hash</b> (ou Array) natif ; XML → document <b>Nokogiri</b> à interroger par sélecteurs.</p>"}, {"bloc": "coeur", "type": "Production de code", "q": "Transformer une String HTML en document interrogeable :", "a": "<pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML.parse(html_string)</code></pre><p>L'équivalent de l'inspecteur du navigateur, pilotable en Ruby.</p>"}, {"bloc": "coeur", "type": "Production de code", "q": "Sélectionner tous les titres <code>&lt;h2&gt;</code> des blocs de classe <code>livre</code> dans un document Nokogiri :", "a": "<pre><code>doc.search(\".livre h2\")  # un sélecteur CSS, comme en front</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "Sur un nœud Nokogiri : <code>.text</code> vs <code>[\"href\"]</code> ?", "a": "<p><code>.text</code> lit le CONTENU visible du nœud ; <code>noeud[\"href\"]</code> lit la valeur de l'ATTRIBUT href.</p><div class='why'><code>.strip</code> en plus pour retirer les espaces parasites du texte.</div>"}, {"bloc": "coeur", "type": "Vocabulaire", "q": "<code>require \"csv\"</code> marche direct, <code>require \"nokogiri\"</code> peut échouer : pourquoi ?", "a": "<p>CSV et JSON font partie de la librairie STANDARD de Ruby. Nokogiri est une gem EXTERNE : il faut l'installer d'abord (<code>gem install nokogiri</code>).</p>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi <code>data[:resultats]</code> renvoie <code>nil</code> ?<pre><code>data = JSON.parse(json_string)\ndata[:resultats]</code></pre>", "a": "<p>Par défaut <code>JSON.parse</code> produit des clés <b>String</b> : la clé <code>\"resultats\"</code> existe, pas <code>:resultats</code>.</p><pre><code>data[\"resultats\"]                # option 1 : rester en String\nJSON.parse(str, symbolize_names: true)  # option 2 : tout en Symbols</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Le fichier généré contient <code>{\"titre\"=&gt;\"Dune\"}</code> au lieu de JSON. Pourquoi ?<pre><code>file.write(mon_hash)</code></pre>", "a": "<p><code>write</code> appelle <code>to_s</code> : c'est la représentation RUBY du Hash, pas du JSON valide.</p><pre><code>file.write(JSON.generate(mon_hash))  # sérialisation explicite</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "La ligne d'en-tête du CSV apparaît dans tes résultats comme si c'était un livre. Cause ?", "a": "<p>L'option <code>headers: true</code> manque : la ligne 1 est traitée comme une DONNÉE.</p><pre><code>CSV.foreach(path, headers: true) do |row|</code></pre>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Piège : que renvoie <code>\"12\" * 2</code> en Ruby ?", "a": "<p><code>\"1212\"</code> : multiplier une String la RÉPÈTE. Aucun avertissement, aucun crash : le bug passe inaperçu.</p><div class='why'>D'où l'importance de convertir les valeurs CSV : <code>\"12\".to_i * 2 =&gt; 24</code>.</div>"}, {"bloc": "faible", "type": "Différence", "q": "<code>\"12.99\".to_i</code> vs <code>\"12.99\".to_f</code> ?", "a": "<p><code>to_i</code> tronque à l'entier : <code>12</code>. <code>to_f</code> garde les décimales : <code>12.99</code>.</p><div class='why'>Pour un prix, <code>to_i</code> perd silencieusement les centimes.</div>"}, {"bloc": "faible", "type": "Débogage", "q": "Ton scraper renvoie un Array vide, sans AUCUNE erreur. Que s'est-il passé ?", "a": "<p>Le sélecteur CSS ne matche plus rien : <code>search</code> ne lève pas d'exception, il renvoie une liste vide. La page a probablement changé de structure.</p><div class='why'>Réflexe : réinspecter la page et tester <code>results.empty?</code> pour le détecter tôt.</div>"}, {"bloc": "faible", "type": "Différence", "q": "<code>File.open</code> vs <code>URI.open</code> : lequel pour quoi ?", "a": "<p><code>File.open</code> ouvre un fichier LOCAL (chemin disque) ; <code>URI.open</code> (via <code>require \"open-uri\"</code>) ouvre une ressource WEB (URL).</p>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Quel est le TYPE de la valeur renvoyée par <code>mon_hash.to_json</code> ?", "a": "<p>Une <b>String</b> (du texte JSON). La sérialisation produit toujours du texte, prêt à être écrit dans un fichier ou envoyé sur le réseau.</p>"}, {"bloc": "faible", "type": "Débogage", "q": "<code>URI.open(url)</code> lève <code>NoMethodError</code>. Qu'as-tu oublié ?", "a": "<pre><code>require \"open-uri\"</code></pre><p>Sans ce require, <code>URI</code> existe mais ne sait pas OUVRIR une URL : la capacité est ajoutée par open-uri.</p>"}, {"bloc": "faible", "type": "Choix idiomatique", "q": "Construire un Array de Hash à partir de lignes CSV : accumulateur <code>&lt;&lt;</code> ou <code>map</code> ?", "a": "<p>Les deux marchent. <code>CSV.foreach + &lt;&lt;</code> est explicite ; <code>CSV.read(path, headers: true).map { }</code> est plus idiomatique quand on transforme TOUT le fichier.</p><div class='why'>Rappel S1 : each parcourt, map collecte.</div>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que renvoie <code>JSON.parse('{\"note\": 5}')[\"note\"] + 1</code> ?", "a": "<p><code>6</code> : contrairement au CSV, le JSON distingue les types : <code>5</code> arrive en vrai Integer, le calcul marche directement.</p>"}, {"bloc": "challenge", "type": "Production de code", "q": "Livecode Films Scraper : les trois <code>require</code> nécessaires et leur rôle ?", "a": "<pre><code>require \"open-uri\"  # ouvrir une URL comme un fichier\nrequire \"nokogiri\"  # parser le HTML\nrequire \"yaml\"      # sérialiser le résultat en YAML</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Télécharger tout le HTML d'une page en une expression :", "a": "<pre><code>html = URI.open(URL).read  # =&gt; une (grosse) String</code></pre><p><code>open</code> établit la connexion, <code>read</code> renvoie le corps complet.</p>"}, {"bloc": "challenge", "type": "Production de code", "q": "Ne garder que les 5 premiers nœuds trouvés par un sélecteur :", "a": "<pre><code>doc.search(\".classement td a\").first(5)</code></pre><p><code>first(n)</code> renvoie un Array des n premiers éléments.</p>"}, {"bloc": "challenge", "type": "Débogage", "q": "Les liens scrapés sont du type <code>\"/wiki/Titanic\"</code> et ne s'ouvrent pas. Pourquoi, et que faire ?", "a": "<p>Ce sont des URL RELATIVES (sans domaine).</p><pre><code>url = \"https://en.wikipedia.org#{link[\"href\"]}\"  # préfixer le domaine</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Stocker un Array de Hash dans un fichier YAML :", "a": "<pre><code>File.open(\"films.yml\", \"wb\") do |file|\n  file.write(films.to_yaml)  # sérialisation YAML\nend</code></pre>"}, {"bloc": "challenge", "type": "Prédiction de sortie", "q": "Que renvoie <code>YAML.load_file(\"films.yml\")</code> ?", "a": "<p>Les objets Ruby RECONSTRUITS depuis le texte YAML (ici un Array de Hash).</p><div class='why'>Relire ce qu'on vient d'écrire prouve que le cycle storing → parsing est complet.</div>"}, {"bloc": "challenge", "type": "Choix idiomatique", "q": "Une API et une page HTML exposent la même donnée : laquelle utiliser et pourquoi ?", "a": "<p>L'API, toujours : données structurées, stables, prévues pour les machines. Le scraping dépend d'un HTML pensé pour les humains, qui peut changer sans préavis et casser les sélecteurs.</p>"}, {"bloc": "rappel", "type": "Différence", "q": "Rappel S1 : Array vs Hash, comment accède-t-on à un élément ?", "a": "<p>Array : par POSITION imposée (<code>menu[2]</code>, « le troisième »). Hash : par CLÉ choisie (<code>menu[\"dessert\"]</code>, « celui qui s'appelle X »).</p>"}, {"bloc": "rappel", "type": "Production de code", "q": "Rappel S1 : itérer en récupérant l'élément ET sa position (ex. numéroter un classement) ?", "a": "<pre><code>films.each_with_index do |film, index|\n  puts \"#{index + 1}. #{film}\"  # rang humain : index + 1\nend</code></pre>"}, {"bloc": "rappel", "type": "Différence", "q": "Rappel S1 : <code>=</code> vs <code>==</code> ?", "a": "<p><code>=</code> AFFECTE une valeur à une variable ; <code>==</code> COMPARE deux valeurs et renvoie un booléen. Dans un <code>if</code>, un <code>=</code> à la place d'un <code>==</code> affecte silencieusement.</p>"}];
+const DIFFS = ["Clés String vs Symbol après <code>JSON.parse</code>", "Tout est String dans un CSV (conversions <code>.to_i</code> / <code>.to_f</code> à faire soi-même)", "<code>file.write(hash)</code> écrit du pseudo-Ruby, pas du JSON", "<code>headers: true</code> oublié : l'en-tête devient une ligne de données"];
+const LABELS = {coeur:"Cœur du cours",faible:"Point faible",challenge:"Challenge du jour",rappel:"Rappel espacé"};
+
+let order = DECK.map((_,i)=>i), pos = 0, flipped = false;
+const mastered = new Set(), missed = new Set(), guesses = {};
+const $ = id => document.getElementById(id);
+
+function render(){
+  const i = order[pos], c = DECK[i];
+  $('tagFront').innerHTML = '<span class="pill '+c.bloc+'">'+LABELS[c.bloc]+'</span><span>'+c.type+'</span>';
+  $('question').innerHTML = c.q;
+  $('back').innerHTML = c.a;
+  $('answer').value = guesses[i] || '';
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+  flipped = false; $('card').classList.remove('flipped');
+  $('counter').innerHTML = 'Carte <b>'+(pos+1)+'</b> / '+DECK.length+' · maîtrisées : <b>'+mastered.size+'</b> / '+DECK.length;
+  $('bar').style.width = (mastered.size/DECK.length*100)+'%';
+  $('prev').disabled = pos===0;
+  $('next').disabled = pos===DECK.length-1;
+}
+function flip(){
+  const i = order[pos];
+  if(!flipped) guesses[i] = $('answer').value;
+  flipped = !flipped;
+  $('card').classList.toggle('flipped', flipped);
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+}
+function go(d){ const n = pos+d; if(n<0||n>=DECK.length) return; pos = n; render(); }
+function evaluate(knew){
+  const i = order[pos];
+  if(knew){ mastered.add(i); missed.delete(i); } else { missed.add(i); mastered.delete(i); }
+  renderRevoir();
+  if(pos < DECK.length-1) go(1); else render();
+}
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+function renderBars(){
+  const counts = {};
+  DECK.forEach(c => counts[c.bloc] = (counts[c.bloc]||0)+1);
+  $('bars').innerHTML = Object.keys(LABELS).filter(k=>counts[k]).map(k=>{
+    const n = counts[k], pct = Math.round(n/DECK.length*100);
+    return '<div><span class="b" style="width:'+(pct*2)+'px;background:var(--'+k+')"></span>'+
+           '<span>'+LABELS[k]+' — <b>'+n+'</b> cartes ('+pct+'%)</span></div>';
+  }).join('');
+  $('diffs').innerHTML = DIFFS.map(d => '<li>'+d+'</li>').join('');
+}
+function renderRevoir(){
+  const list = [...missed];
+  $('revoir').innerHTML = list.length
+    ? '<p>Colle cette liste à Claude demain pour le rappel espacé :</p><pre><code>'+
+      list.map(i => '- ' + DECK[i].q.replace(/<[^>]+>/g,'')).join('\n') + '</code></pre>'
+    : 'Aucune carte marquée pour l\'instant.';
+}
+$('flip').addEventListener('click', flip);
+$('next').addEventListener('click', ()=>go(1));
+$('prev').addEventListener('click', ()=>go(-1));
+$('shuffle').addEventListener('click', shuffle);
+$('ok').addEventListener('click', ()=>evaluate(true));
+$('ko').addEventListener('click', ()=>evaluate(false));
+document.addEventListener('keydown', e=>{
+  if(e.altKey && e.key==='Enter'){ e.preventDefault(); flip(); return; }
+  if(document.activeElement === $('answer')) return;
+  if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if(e.key.toLowerCase()==='s') shuffle();
+  else if(flipped && e.key==='1') evaluate(false);
+  else if(flipped && e.key==='2') evaluate(true);
+});
+renderBars(); render(); renderRevoir();
+</script>
+</body>
+</html>

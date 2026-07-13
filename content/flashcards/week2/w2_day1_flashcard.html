@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards — Regular Expressions</title>
+<style>
+  :root{--bg:#f4f5f7;--card:#fff;--accent:#B40A00;--ink:#1f2430;--muted:#6b7280;--code:#f6f8fa;--ok:#16a34a;--ko:#dc2626;
+        --coeur:#2563eb;--faible:#B40A00;--challenge:#b45309;--rappel:#7c3aed;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
+  header{text-align:center;margin-bottom:8px}
+  header h1{font-size:20px;margin:0;color:var(--accent)}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .progress{width:100%;max-width:680px;height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:14px 0 6px}
+  .progress-bar{height:100%;background:var(--ok);width:0;transition:width .25s}
+  .counter{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center}
+  .counter b{color:var(--ink)}
+  .scene{width:100%;max-width:680px;perspective:1600px}
+  .card{position:relative;width:100%;min-height:380px;transform-style:preserve-3d;transition:transform .5s}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:28px;display:flex;flex-direction:column;overflow:auto}
+  .face .tag{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{border-radius:99px;padding:2px 9px;color:#fff;font-size:10px;letter-spacing:.4px}
+  .pill.coeur{background:var(--coeur)} .pill.faible{background:var(--faible)}
+  .pill.challenge{background:var(--challenge)} .pill.rappel{background:var(--rappel)}
+  .front .question{font-size:18px;font-weight:600;line-height:1.5}
+  .back{transform:rotateY(180deg)}
+  .back .content{font-size:15px;line-height:1.6}
+  textarea{width:100%;margin-top:auto;min-height:90px;border:1px solid #d1d5db;border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .guessed{margin-top:14px;background:var(--code);border-left:3px solid var(--muted);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+  .guessed b{color:var(--ink)}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-size:.9em;font-family:SFMono-Regular,Consolas,monospace}
+  pre{background:#0d1117;color:#e6edf3;padding:14px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5}
+  pre code{background:none;padding:0;color:inherit}
+  .content p{margin:0 0 10px}
+  .why{font-size:13px;color:var(--muted);border-top:1px dashed #e5e7eb;padding-top:10px;margin-top:6px}
+  .selfeval{display:flex;gap:10px;margin-top:auto;padding-top:14px}
+  .controls{display:flex;gap:10px;margin-top:20px;width:100%;max-width:680px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;border:none;border-radius:9px;padding:11px 18px;cursor:pointer;font-weight:600;font-size:14px}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .btn-ok{background:var(--ok);color:#fff;flex:1}
+  .btn-ko{background:var(--ko);color:#fff;flex:1}
+  button:disabled{opacity:.4;cursor:default}
+  .recap{width:100%;max-width:680px;margin-top:26px;background:#fff;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px}
+  .recap h2{font-size:15px;margin:0 0 12px;color:var(--accent)}
+  .recap h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 0 8px}
+  .recap ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.65}
+  .bars{display:flex;flex-direction:column;gap:6px;font-size:13px}
+  .bars div{display:flex;align-items:center;gap:8px}
+  .bars .b{height:8px;border-radius:99px}
+  #revoir{font-size:13.5px;line-height:1.6}
+  footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;max-width:680px}
+  kbd{background:#fff;border:1px solid #d1d5db;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:11px;font-family:inherit}
+</style>
+</head>
+<body>
+<header>
+  <h1>Flashcards — Regular Expressions</h1>
+  <p>Le Wagon · Batch 2319 · 13 juillet 2026 · set généraliste (sans session de chat)</p>
+</header>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div class="counter" id="counter"></div>
+
+<div class="scene"><div class="card" id="card">
+  <div class="face front">
+    <div class="tag" id="tagFront"></div>
+    <div class="question" id="question"></div>
+    <textarea id="answer" placeholder="Écris ta réponse ici, puis alt + entrée pour retourner la carte…"></textarea>
+  </div>
+  <div class="face back">
+    <div class="tag">Réponse</div>
+    <div class="content" id="back"></div>
+    <div class="guessed" id="guessed"></div>
+    <div class="selfeval">
+      <button class="btn-ko" id="ko">✗ Did not know</button>
+      <button class="btn-ok" id="ok">✓ I knew it!</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="controls">
+  <button class="btn-ghost" id="prev">← Précédent</button>
+  <button class="btn-ghost" id="flip">Flip card</button>
+  <button class="btn-ghost" id="shuffle">Mélanger</button>
+  <button class="btn-primary" id="next">Suivant →</button>
+</div>
+
+<div class="recap">
+  <h2>Récapitulatif du set</h2>
+  <h3>Répartition réelle</h3>
+  <div class="bars" id="bars"></div>
+  <h3>Difficultés personnelles couvertes</h3>
+  <ul id="diffs"></ul>
+  <h3>À revoir demain (cartes « Did not know »)</h3>
+  <div id="revoir">Aucune carte marquée pour l'instant.</div>
+</div>
+
+<footer>
+  <kbd>←</kbd> <kbd>→</kbd> naviguer · <kbd>alt + ⏎</kbd> retourner · <kbd>S</kbd> mélanger · <kbd>1</kbd> did not know · <kbd>2</kbd> I knew it<br>
+  35 cartes · usage personnel · contenu © Le Wagon.
+</footer>
+
+<script>
+const DECK = [{"bloc": "coeur", "type": "Production de code", "q": "Comment écrire un littéral de regex en Ruby ? (deux syntaxes)", "a": "<p>Entre slashes, ou avec <code>%r{}</code> quand le motif contient des <code>/</code> :</p><pre><code>/\\d+/        # la forme habituelle\n%r{https?://} # évite d'échapper les slashes</code></pre>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>\\d</code>, <code>\\w</code>, <code>\\s</code> : que matche chacun ?", "a": "<p><code>\\d</code> un chiffre (0-9), <code>\\w</code> un caractère alphanumérique (lettre, chiffre, underscore), <code>\\s</code> un blanc (espace, tabulation, retour à la ligne).</p><div class='why'>Les majuscules inversent : <code>\\D</code> = tout sauf un chiffre.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment valider qu'une chaîne est composée UNIQUEMENT de chiffres ?", "a": "<pre><code>chaine.match?(/^\\d+$/)  # ancré des deux côtés</code></pre><p><code>^</code> début, <code>\\d+</code> au moins un chiffre, <code>$</code> fin : rien d'autre ne peut se glisser.</p>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"wagon123\" =~ /\\d+/</code> ?", "a": "<p><code>5</code> : l'INDEX où commence la première correspondance (le <code>1</code> est le 6e caractère, index 5).</p><div class='why'>Un index, pas un booléen : c'est le piège classique de <code>=~</code>.</div>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>match</code> vs <code>match?</code> : lequel choisir et pourquoi ?", "a": "<p><code>match?</code> renvoie <code>true</code>/<code>false</code> : pour VALIDER dans un <code>if</code>. <code>match</code> renvoie un <code>MatchData</code> (ou <code>nil</code>) : pour EXTRAIRE les groupes capturés.</p>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment capturer l'année de <code>\"sortie: 2026\"</code> avec un groupe NOMMÉ ?", "a": "<pre><code>md = \"sortie: 2026\".match(/(?&lt;annee&gt;\\d{4})/)\nmd[:annee]  # =&gt; \"2026\" (accès comme un Hash)</code></pre>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"a1b2c3\".scan(/\\d/)</code> ?", "a": "<p><code>[\"1\", \"2\", \"3\"]</code> : un Array de TOUTES les correspondances.</p><div class='why'>Des String, pas des Integer : <code>.map(&amp;:to_i)</code> si tu veux calculer.</div>"}, {"bloc": "coeur", "type": "Choix idiomatique", "q": "Quelle est la meilleure façon de tester « ça matche ? » dans une condition ?", "a": "<pre><code>if email.match?(/@/)  # renvoie un vrai booléen</code></pre><p><code>match?</code> est aussi plus rapide que <code>match</code> : il ne construit pas de MatchData.</p>"}, {"bloc": "coeur", "type": "Vocabulaire", "q": "Que signifie le quantificateur <code>{2,4}</code> ?", "a": "<p>« L'élément précédent, répété entre 2 et 4 fois. » <code>/a{2,4}/</code> matche aa, aaa, aaaa.</p><div class='why'>Variantes : <code>{3}</code> exactement 3, <code>{2,}</code> 2 ou plus.</div>"}, {"bloc": "coeur", "type": "Différence", "q": "Quantificateurs : <code>*</code> vs <code>+</code> ?", "a": "<p><code>*</code> = zéro fois ou plus (accepte l'absence), <code>+</code> = UNE fois ou plus (exige au moins une occurrence).</p><div class='why'>Pour valider une saisie non vide, c'est presque toujours <code>+</code>.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment rendre une regex insensible à la casse ?", "a": "<pre><code>/ruby/i.match?(\"RUBY\")  # =&gt; true</code></pre><p>Le modificateur <code>i</code> (insensitive) se place après le slash fermant.</p>"}, {"bloc": "coeur", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"bonjour\".match?(/^jour/)</code> ?", "a": "<p><code>false</code> : <code>^</code> exige que « jour » soit au DÉBUT de la chaîne, or elle commence par « bon ».</p><div class='why'>Sans le <code>^</code>, ce serait <code>true</code>.</div>"}, {"bloc": "coeur", "type": "Production de code", "q": "Comment matcher un VRAI point dans une regex (ex. une extension de fichier) ?", "a": "<pre><code>/\\.html$/  # \\. = le caractère point, littéralement</code></pre><p>Le point nu <code>.</code> signifie « n'importe quel caractère » : il faut l'échapper avec <code>\\</code>.</p>"}, {"bloc": "coeur", "type": "Différence", "q": "<code>[abc]</code> vs <code>(abc)</code> : quelle différence fondamentale ?", "a": "<p><code>[abc]</code> = UN caractère parmi a, b ou c (classe de caractères). <code>(abc)</code> = la séquence « abc » entière, capturée en groupe.</p>"}, {"bloc": "faible", "type": "Débogage", "q": "Ce code n'entre jamais dans le if. Pourquoi ?<pre><code>if texte =~ /\\d/ == true\n  puts \"nombre trouvé\"\nend</code></pre>", "a": "<p><code>=~</code> renvoie un INDEX (Integer) ou <code>nil</code>, jamais <code>true</code>. <code>0 == true</code> est faux.</p><pre><code>if texte.match?(/\\d/)  # un vrai booléen</code></pre>"}, {"bloc": "faible", "type": "Différence", "q": "<code>^</code> en début de motif vs <code>^</code> DANS des crochets : deux sens ?", "a": "<p><code>/^a/</code> : ancre, « commence par a ». <code>/[^a]/</code> : négation, « un caractère qui n'est PAS a ».</p><div class='why'>Même symbole, deux rôles : sa position décide.</div>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"a-b-c\".match(/^(.*)-/)[1]</code> ?", "a": "<p><code>\"a-b\"</code> : le quantificateur est GOURMAND, <code>.*</code> avale le maximum tout en laissant un <code>-</code> pour finir le motif.</p>"}, {"bloc": "faible", "type": "Production de code", "q": "Comment rendre <code>.*</code> NON gourmand (s'arrêter à la première correspondance) ?", "a": "<pre><code>/^(.*?)-/  # le ? après le quantificateur le rend paresseux</code></pre><p>Sur <code>\"a-b-c\"</code>, le groupe capture <code>\"a\"</code> au lieu de <code>\"a-b\"</code>.</p>"}, {"bloc": "faible", "type": "Débogage", "q": "Cette validation accepte <code>\"xx12345yy\"</code>. Corrige :<pre><code>code_postal.match?(/\\d{5}/)</code></pre>", "a": "<pre><code>code_postal.match?(/^\\d{5}$/)</code></pre><p>Sans ancres, la regex cherche 5 chiffres QUELQUE PART. Avec <code>^ $</code>, la chaîne entière doit être exactement 5 chiffres.</p>"}, {"bloc": "faible", "type": "Différence", "q": "<code>gsub</code> vs <code>sub</code> ?", "a": "<p><code>gsub</code> remplace TOUTES les occurrences (g = global), <code>sub</code> seulement la PREMIÈRE. Les deux renvoient une nouvelle String sans modifier l'originale.</p>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi ce calcul plante ?<pre><code>\"prix: 12\".scan(/\\d+/).first + 1</code></pre>", "a": "<p><code>scan</code> renvoie des <b>String</b> : <code>\"12\" + 1</code> lève un <code>TypeError</code> (on ne concatène pas une String et un Integer).</p><pre><code>\"prix: 12\".scan(/\\d+/).first.to_i + 1  # =&gt; 13</code></pre>"}, {"bloc": "faible", "type": "Débogage", "q": "Pourquoi <code>/www.exemple.org/</code> matche aussi <code>\"wwwZexempleQorg\"</code> ?", "a": "<p>Chaque point nu matche N'IMPORTE QUEL caractère, y compris Z et Q.</p><pre><code>/www\\.exemple\\.org/  # points échappés = vrais points</code></pre>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "Que se passe-t-il ici si rien ne matche ?<pre><code>md = chaine.match(/\\d{4}/)\nputs md[0]</code></pre>", "a": "<p><code>match</code> renvoie <code>nil</code> quand rien ne matche : <code>md[0]</code> lève <code>NoMethodError</code> (undefined method [] for nil).</p><div class='why'>Réflexe : garde-fou <code>return nil if md.nil?</code> ou opérateur <code>&amp;.</code></div>"}, {"bloc": "faible", "type": "Production de code", "q": "Comment répéter un GROUPE entier (pas juste le dernier caractère) ? Ex. valider « espace + 2 chiffres » quatre fois.", "a": "<pre><code>/( \\d{2}){4}/  # les parenthèses groupent, {4} répète le groupe</code></pre><p>Sans parenthèses, le quantificateur ne s'applique qu'à l'élément immédiatement précédent.</p>"}, {"bloc": "faible", "type": "Prédiction de sortie", "q": "<code>\"Ruby\".match?(/ruby/)</code> puis <code>\"Ruby\".match?(/ruby/i)</code> : que renvoient-ils ?", "a": "<p><code>false</code> puis <code>true</code> : sans flag, la casse compte (R majuscule ≠ r) ; <code>/i</code> ignore la casse.</p>"}, {"bloc": "challenge", "type": "Choix idiomatique", "q": "Livecode URL Parser : pourquoi écrire la regex avec <code>%r{...}</code> plutôt que <code>/.../</code> ?", "a": "<p>Une URL contient des <code>/</code> : avec <code>/.../</code> il faudrait tous les échapper (<code>\\/\\/</code>). <code>%r{}</code> les autorise tels quels.</p><pre><code>%r{^https?://}  # lisible\n/^https?:\\/\\//  # le même, illisible</code></pre>"}, {"bloc": "challenge", "type": "Production de code", "q": "Extraire le scheme (http/https) d'une URL avec un groupe nommé :", "a": "<pre><code>md = url.match(%r{^(?&lt;scheme&gt;https?)://})\nmd[:scheme]  # =&gt; \"https\"</code></pre>"}, {"bloc": "challenge", "type": "Débogage", "q": "Ton parse_url plante avec <code>NoMethodError</code> sur les chaînes qui ne sont pas des URL. Quel garde-fou ?", "a": "<pre><code>md = url.match(PATTERN)\nreturn nil if md.nil?  # URL non reconnue : on sort proprement</code></pre><div class='why'>Sans ce garde, <code>md[:scheme]</code> s'exécute sur nil.</div>"}, {"bloc": "challenge", "type": "Production de code", "q": "Transformer la query string <code>\"a=1&amp;b=2\"</code> en Hash <code>{ a: \"1\", b: \"2\" }</code> :", "a": "<pre><code>query.split(\"&amp;\").each_with_object({}) do |pair, h|\n  key, value = pair.split(\"=\")  # affectation multiple\n  h[key.to_sym] = value\nend</code></pre>"}, {"bloc": "challenge", "type": "Prédiction de sortie", "q": "Que renvoie <code>\"/skills/ruby\".split(\"/\")</code> et comment obtenir <code>[\"skills\", \"ruby\"]</code> ?", "a": "<p><code>[\"\", \"skills\", \"ruby\"]</code> : la chaîne COMMENCE par le séparateur, d'où un premier élément vide.</p><pre><code>path.split(\"/\").reject(&amp;:empty?)</code></pre>"}, {"bloc": "challenge", "type": "Vocabulaire", "q": "À quoi sert <code>(?:...)</code> dans une regex ?", "a": "<p>C'est un groupe NON CAPTURANT : il groupe (pour un quantificateur ou une alternative) sans créer d'entrée dans le MatchData.</p><div class='why'>Utile pour garder des index/noms de capture propres, ex. <code>(?:\\.[a-z]{2,})+</code> pour un TLD composé.</div>"}, {"bloc": "challenge", "type": "Choix idiomatique", "q": "Comment rendre lisible une LONGUE regex (comme celle du parseur d'URL) ?", "a": "<p>Le modificateur <code>x</code> (mode étendu) : espaces et commentaires autorisés DANS le motif.</p><pre><code>%r{\n  ^(?&lt;scheme&gt;[a-z]+)  # http ou https\n  ://                  # séparateur\n}x</code></pre>"}, {"bloc": "rappel", "type": "Différence", "q": "Rappel S1 : <code>puts</code> vs <code>return</code> dans une méthode ?", "a": "<p><code>puts</code> AFFICHE pour l'humain et renvoie <code>nil</code> ; <code>return</code> TRANSMET une valeur au code appelant. Un test lit la valeur de retour, pas l'écran.</p>"}, {"bloc": "rappel", "type": "Prédiction de sortie", "q": "Rappel S1 : que renvoient <code>[1,2,3].each { |n| n * 2 }</code> et <code>[1,2,3].map { |n| n * 2 }</code> ?", "a": "<p><code>each</code> renvoie le tableau de DÉPART <code>[1,2,3]</code> ; <code>map</code> renvoie les résultats du bloc <code>[2,4,6]</code>.</p>"}, {"bloc": "rappel", "type": "Production de code", "q": "Rappel S1 : itérer sur un Array en récupérant AUSSI la position de chaque élément ?", "a": "<pre><code>hands.each_with_index do |element, index|\n  puts \"#{index + 1}. #{element}\"  # index humain : +1\nend</code></pre>"}];
+const DIFFS = ["Ancres <code>^ $</code> oubliées en validation (correspondance partielle acceptée)", "<code>=~</code> renvoie un index, jamais <code>true</code>", "Quantificateurs gourmands : <code>.*</code> avale le maximum", "Le point <code>.</code> non échappé matche n'importe quel caractère"];
+const LABELS = {coeur:"Cœur du cours",faible:"Point faible",challenge:"Challenge du jour",rappel:"Rappel espacé"};
+
+let order = DECK.map((_,i)=>i), pos = 0, flipped = false;
+const mastered = new Set(), missed = new Set(), guesses = {};
+const $ = id => document.getElementById(id);
+
+function render(){
+  const i = order[pos], c = DECK[i];
+  $('tagFront').innerHTML = '<span class="pill '+c.bloc+'">'+LABELS[c.bloc]+'</span><span>'+c.type+'</span>';
+  $('question').innerHTML = c.q;
+  $('back').innerHTML = c.a;
+  $('answer').value = guesses[i] || '';
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+  flipped = false; $('card').classList.remove('flipped');
+  $('counter').innerHTML = 'Carte <b>'+(pos+1)+'</b> / '+DECK.length+' · maîtrisées : <b>'+mastered.size+'</b> / '+DECK.length;
+  $('bar').style.width = (mastered.size/DECK.length*100)+'%';
+  $('prev').disabled = pos===0;
+  $('next').disabled = pos===DECK.length-1;
+}
+function flip(){
+  const i = order[pos];
+  if(!flipped) guesses[i] = $('answer').value;
+  flipped = !flipped;
+  $('card').classList.toggle('flipped', flipped);
+  $('guessed').innerHTML = '<b>Ce que tu avais tapé :</b>\n' + (guesses[i] ? guesses[i] : '— (rien)');
+}
+function go(d){ const n = pos+d; if(n<0||n>=DECK.length) return; pos = n; render(); }
+function evaluate(knew){
+  const i = order[pos];
+  if(knew){ mastered.add(i); missed.delete(i); } else { missed.add(i); mastered.delete(i); }
+  renderRevoir();
+  if(pos < DECK.length-1) go(1); else render();
+}
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+function renderBars(){
+  const counts = {};
+  DECK.forEach(c => counts[c.bloc] = (counts[c.bloc]||0)+1);
+  $('bars').innerHTML = Object.keys(LABELS).filter(k=>counts[k]).map(k=>{
+    const n = counts[k], pct = Math.round(n/DECK.length*100);
+    return '<div><span class="b" style="width:'+(pct*2)+'px;background:var(--'+k+')"></span>'+
+           '<span>'+LABELS[k]+' — <b>'+n+'</b> cartes ('+pct+'%)</span></div>';
+  }).join('');
+  $('diffs').innerHTML = DIFFS.map(d => '<li>'+d+'</li>').join('');
+}
+function renderRevoir(){
+  const list = [...missed];
+  $('revoir').innerHTML = list.length
+    ? '<p>Colle cette liste à Claude demain pour le rappel espacé :</p><pre><code>'+
+      list.map(i => '- ' + DECK[i].q.replace(/<[^>]+>/g,'')).join('\n') + '</code></pre>'
+    : 'Aucune carte marquée pour l\'instant.';
+}
+$('flip').addEventListener('click', flip);
+$('next').addEventListener('click', ()=>go(1));
+$('prev').addEventListener('click', ()=>go(-1));
+$('shuffle').addEventListener('click', shuffle);
+$('ok').addEventListener('click', ()=>evaluate(true));
+$('ko').addEventListener('click', ()=>evaluate(false));
+document.addEventListener('keydown', e=>{
+  if(e.altKey && e.key==='Enter'){ e.preventDefault(); flip(); return; }
+  if(document.activeElement === $('answer')) return;
+  if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+  else if(e.key.toLowerCase()==='s') shuffle();
+  else if(flipped && e.key==='1') evaluate(false);
+  else if(flipped && e.key==='2') evaluate(true);
+});
+renderBars(); render(); renderRevoir();
+</script>
+</body>
+</html>

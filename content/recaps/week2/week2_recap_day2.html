@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recap du jour — Le Wagon — Semaine 2 Jour 2 · Parsing</title>
+<style>
+  :root{
+    --paper:#fdfcf7;        /* fond bristol crème */
+    --ink:#1f2430;          /* texte principal */
+    --muted:#6b7280;        /* texte secondaire */
+    --line:#e7e3d6;         /* filets de la fiche */
+    --accent:#c0562b;       /* orange brûlé, accent titres */
+    --spine:#8a3c1d;        /* section 1, colonne vertébrale */
+    --concept:#2563a8;      /* concepts */
+    --trap:#b3341f;         /* pièges */
+    --pattern:#2f7d54;      /* patterns/code */
+    --voc:#7a5cc0;          /* méthodes/vocabulaire */
+    --quiz:#a8781f;         /* auto-test */
+    --code-bg:#f4f1e8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:32px;background:#eceae0;color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    line-height:1.5;
+  }
+  .fiche{
+    max-width:820px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.10);
+    padding:34px 40px 40px;
+    background-image:repeating-linear-gradient(
+      var(--paper),var(--paper) 30px,#f5f2e8 31px);
+  }
+  header{border-bottom:3px double var(--accent);
+    padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    letter-spacing:.14em;text-transform:uppercase;font-size:12px;
+    color:var(--accent);font-weight:700}
+  h1{margin:4px 0 2px;font-size:27px;color:var(--ink)}
+  .meta{color:var(--muted);font-size:14px}
+  section{margin-top:26px}
+  h2{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:16px;margin:0 0 12px;padding-left:12px;
+    border-left:5px solid var(--accent);line-height:1.25}
+  .s-spine h2{border-color:var(--spine);color:var(--spine)}
+  .s-concept h2{border-color:var(--concept);color:var(--concept)}
+  .s-trap h2{border-color:var(--trap);color:var(--trap)}
+  .s-pattern h2{border-color:var(--pattern);color:var(--pattern)}
+  .s-voc h2{border-color:var(--voc);color:var(--voc)}
+  .s-quiz h2{border-color:var(--quiz);color:var(--quiz)}
+  .qa{background:#fbf3ee;border:1px solid #f0dccf;
+    border-left:4px solid var(--spine);border-radius:6px;
+    padding:12px 16px;margin:10px 0}
+  .qa .q{font-weight:700;color:var(--spine)}
+  .qa .a{margin-top:6px}
+  .card{background:#fff;border:1px solid var(--line);
+    border-radius:6px;padding:12px 16px;margin:10px 0}
+  .card .why{color:var(--muted);font-size:14px;margin-top:4px}
+  .trap-row{display:grid;grid-template-columns:1fr;gap:4px;
+    border:1px solid #f0d9d3;border-radius:6px;
+    padding:10px 14px;margin:10px 0;background:#fdf3f1}
+  .trap-row b{color:var(--trap)}
+  pre{background:var(--code-bg);border:1px solid var(--line);
+    border-radius:6px;padding:12px 14px;overflow:auto;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.55}
+  .cmt{color:#8a8368;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);
+    vertical-align:top}
+  th{font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted)}
+  code{background:var(--code-bg);border-radius:4px;padding:1px 5px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px}
+  details{border:1px solid #ecdfc4;background:#fdf8ec;
+    border-radius:6px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--quiz)}
+  details[open]{background:#fcf5e2}
+  .ans{margin-top:8px;color:var(--ink)}
+  footer{margin-top:30px;border-top:1px solid var(--line);
+    padding-top:10px;color:var(--muted);font-size:12px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+  @media print{
+    body{background:#fff;padding:0}
+    .fiche{box-shadow:none;border:none;background:var(--paper)}
+    details{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="fiche">
+
+  <header>
+    <div class="kicker">Le Wagon · Camp 2319 · Recap</div>
+    <h1>Recap du jour — Semaine 2, Jour 2</h1>
+    <div class="meta">Mardi 14 juillet 2026 · Parsing (CSV, JSON, XML, API, scraping) · <b>fiche généraliste</b> : bâtie sur le cours, sans session de chat ce jour</div>
+  </header>
+
+  <section class="s-spine">
+    <h2>🧠 Questions clés du jour</h2>
+    <div class="qa">
+      <div class="q">« Parser, ça veut dire quoi exactement ? »</div>
+      <div class="a">Transformer un TEXTE structuré (le contenu d'un fichier CSV, JSON ou XML : ce ne sont que des String) en <b>objets Ruby manipulables</b> : Array, Hash, objets Nokogiri. Le sens inverse (objets Ruby → fichier) s'appelle le <b>storing</b>. Toute la journée tient dans cet aller-retour.</div>
+    </div>
+    <div class="qa">
+      <div class="q">« CSV, JSON, XML : lequel choisir ? »</div>
+      <div class="a">On choisit rarement : on s'adapte à ce que la source fournit. En pratique : CSV pour les données tabulaires (export tableur), JSON pour les API web (le standard aujourd'hui), XML pour les systèmes plus anciens ou les flux type RSS. Côté Ruby : CSV → Array de lignes, JSON → Hash, XML → document Nokogiri.</div>
+    </div>
+    <div class="qa">
+      <div class="q">« Pourquoi mes nombres CSV ne se calculent pas ? »</div>
+      <div class="a">Parce qu'un fichier CSV ne contient QUE du texte : <code>"1969"</code> y est une String, même si ça ressemble à un nombre. Après parsing, il faut convertir soi-même : <code>.to_i</code> ou <code>.to_f</code>. (JSON, lui, distingue nativement nombres, booléens et chaînes.)</div>
+    </div>
+    <div class="qa">
+      <div class="q">« API ou scraping, comment je choisis ? »</div>
+      <div class="a"><b>API d'abord, scraping en dernier recours.</b> Une API renvoie du JSON structuré, stable et prévu pour les machines. Le scraping dissèque du HTML conçu pour des humains : au premier changement de structure de la page, les sélecteurs CSS cassent. On scrape uniquement quand il n'existe pas d'API.</div>
+    </div>
+  </section>
+
+  <section class="s-concept">
+    <h2>🎯 Concepts clés</h2>
+    <div class="card">
+      <b>Parsing / storing : les deux sens de la conversion</b>
+      <div class="why">Parsing : fichier → objets Ruby (lire). Storing : objets Ruby → fichier (écrire). Un programme utile fait souvent les deux : lire une source, transformer, sauvegarder le résultat.</div>
+    </div>
+    <div class="card">
+      <b><code>require</code> : charger l'outil avant de s'en servir</b>
+      <div class="why"><code>require "csv"</code>, <code>require "json"</code> : ces librairies font partie de Ruby mais ne sont pas chargées par défaut. Nokogiri, elle, est une gem EXTERNE : il faut l'installer (<code>gem install nokogiri</code>) avant de pouvoir la requérir.</div>
+    </div>
+    <div class="card">
+      <b>Le CSV se lit ligne à ligne, avec ses options</b>
+      <div class="why"><code>CSV.foreach(chemin, headers: true)</code> itère ligne par ligne sans charger tout le fichier ; <code>headers: true</code> déclare que la première ligne est l'en-tête, ce qui permet d'accéder aux cellules par NOM (<code>row["titre"]</code>) au lieu d'un index fragile (<code>row[0]</code>).</div>
+    </div>
+    <div class="card">
+      <b>Le JSON du web s'ouvre comme un fichier</b>
+      <div class="why">Avec <code>require "open-uri"</code>, <code>URI.open(url).read</code> renvoie le corps de la réponse en String, que <code>JSON.parse</code> transforme en Hash. Trois lignes suffisent pour consommer une API.</div>
+    </div>
+    <div class="card">
+      <b>Nokogiri interroge le HTML avec des sélecteurs CSS</b>
+      <div class="why">Le même langage qu'en front : <code>document.search(".item h2 a")</code>. Le réflexe : ouvrir l'inspecteur du navigateur, repérer la classe ou la balise qui isole la donnée, puis traduire en sélecteur. <code>.text</code> lit le contenu, <code>["href"]</code> lit un attribut.</div>
+    </div>
+  </section>
+
+  <section class="s-trap">
+    <h2>⚠️ Pièges du jour</h2>
+    <div class="trap-row">
+      <div><b>Erreur :</b> la première ligne de données du CSV « disparaît » ou, pire, l'en-tête est traité comme une donnée.</div>
+      <div><b>Cause :</b> l'option <code>headers: true</code> oubliée (ou ajoutée alors que le fichier n'a PAS d'en-tête).</div>
+      <div><b>Correctif :</b> ouvrir le fichier brut, vérifier si la ligne 1 est un en-tête, et aligner l'option sur la réalité du fichier.</div>
+    </div>
+    <div class="trap-row">
+      <div><b>Erreur :</b> <code>JSON.parse(data)["resultats"]</code> renvoie <code>nil</code> alors que la clé « existe ».</div>
+      <div><b>Cause :</b> par défaut, <code>JSON.parse</code> produit des clés <b>String</b> ; on interroge avec un Symbol (<code>[:resultats]</code>) ou l'inverse.</div>
+      <div><b>Correctif :</b> soit rester en String (<code>["resultats"]</code>), soit parser avec <code>symbolize_names: true</code> et utiliser des Symbols partout. Choisir UNE convention.</div>
+    </div>
+    <div class="trap-row">
+      <div><b>Erreur :</b> écrire un fichier JSON avec <code>file.write(hash)</code> et obtenir du pseudo-Ruby illisible.</div>
+      <div><b>Cause :</b> <code>write</code> appelle <code>to_s</code> sur le Hash : ça produit sa représentation Ruby, pas du JSON valide.</div>
+      <div><b>Correctif :</b> sérialiser d'abord : <code>file.write(JSON.generate(hash))</code> (ou <code>hash.to_json</code>).</div>
+    </div>
+    <div class="trap-row">
+      <div><b>Erreur :</b> le scraper qui marchait hier renvoie un Array vide aujourd'hui.</div>
+      <div><b>Cause :</b> la page a changé de structure : le sélecteur CSS ne matche plus rien (et <code>search</code> ne lève PAS d'erreur, il renvoie une liste vide).</div>
+      <div><b>Correctif :</b> réinspecter la page, réajuster le sélecteur ; et vérifier <code>results.empty?</code> pour détecter le problème tôt. C'est la fragilité structurelle du scraping.</div>
+    </div>
+  </section>
+
+  <section class="s-pattern">
+    <h2>🔧 Patterns &amp; idiomes</h2>
+    <pre><code>require "csv"                                    <span class="cmt"># charge la librairie CSV (incluse dans Ruby)</span>
+livres = []                                      <span class="cmt"># accumulateur : un Hash par ligne du fichier</span>
+CSV.foreach("livres.csv", headers: true) do |row| <span class="cmt"># itère ligne à ligne ; headers: true -&gt; accès par nom de colonne</span>
+  livres &lt;&lt; { titre: row["titre"], annee: row["annee"].to_i } <span class="cmt"># tout est String en CSV : .to_i pour l'année</span>
+end
+
+require "json"                                   <span class="cmt"># parsing d'une API web :</span>
+require "open-uri"                               <span class="cmt"># open-uri permet d'ouvrir une URL comme un fichier</span>
+url = "https://api.exemple.io/livres"            <span class="cmt"># l'endpoint qui renvoie du JSON</span>
+data = JSON.parse(URI.open(url).read, symbolize_names: true) <span class="cmt"># télécharge, lit, parse : String JSON -&gt; Hash à clés Symbol</span>
+puts data[:resultats].first[:titre]              <span class="cmt"># on navigue ensuite comme dans n'importe quel Hash</span>
+
+File.open("livres.json", "wb") do |file|         <span class="cmt"># storing : le bloc referme le fichier automatiquement</span>
+  file.write(JSON.generate(livres))              <span class="cmt"># JSON.generate sérialise les objets Ruby en texte JSON valide</span>
+end
+
+require "nokogiri"                               <span class="cmt"># scraping (en dernier recours, si pas d'API) :</span>
+doc = Nokogiri::HTML.parse(URI.open("https://exemple.org/catalogue").read) <span class="cmt"># HTML brut -&gt; document interrogeable</span>
+doc.search(".livre h2").each do |noeud|          <span class="cmt"># sélecteur CSS, comme en front</span>
+  puts noeud.text.strip                          <span class="cmt"># .text : le texte visible du nœud ; .strip : sans espaces parasites</span>
+end</code></pre>
+  </section>
+
+  <section class="s-voc">
+    <h2>📖 Méthodes &amp; vocabulaire</h2>
+    <table>
+      <thead><tr><th>Méthode</th><th>Ce qu'elle fait</th><th>Valeur de retour</th></tr></thead>
+      <tbody>
+        <tr><td><code>CSV.foreach(path, headers: true)</code></td><td>itère sur un CSV ligne à ligne</td><td><code>nil</code> (l'intérêt est dans le bloc)</td></tr>
+        <tr><td><code>JSON.parse(string)</code></td><td>texte JSON → objets Ruby</td><td>Hash (ou Array)</td></tr>
+        <tr><td><code>JSON.generate(objet)</code></td><td>objets Ruby → texte JSON</td><td>String</td></tr>
+        <tr><td><code>URI.open(url).read</code></td><td>télécharge une ressource web</td><td>String (le corps de la réponse)</td></tr>
+        <tr><td><code>Nokogiri::HTML.parse(html)</code></td><td>String HTML → document navigable</td><td><code>Nokogiri::HTML::Document</code></td></tr>
+        <tr><td><code>doc.search("sélecteur")</code></td><td>trouve les nœuds via un sélecteur CSS</td><td>liste de nœuds (vide si rien)</td></tr>
+        <tr><td><code>noeud.text</code> / <code>noeud["attr"]</code></td><td>lit le texte / un attribut d'un nœud</td><td>String</td></tr>
+        <tr><td><code>File.open(path, "wb") { }</code></td><td>ouvre un fichier en écriture, le referme après le bloc</td><td>la valeur du bloc</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="s-quiz">
+    <h2>❓ Auto-test <span style="font-weight:400;color:var(--muted);font-size:13px">(réponds de mémoire, puis déplie)</span></h2>
+    <details>
+      <summary>Quelle structure Ruby obtient-on en parsant : un CSV ? un JSON ? un XML ?</summary>
+      <div class="ans">CSV → des lignes qu'on accumule en Array (chaque ligne accessible par nom de colonne avec <code>headers: true</code>). JSON → Hash (ou Array) natif. XML → un document Nokogiri qu'on interroge avec des sélecteurs.</div>
+    </details>
+    <details>
+      <summary>Que fait <code>headers: true</code> et que se passe-t-il sans ?</summary>
+      <div class="ans">Il déclare la ligne 1 comme en-tête : les cellules deviennent accessibles par nom (<code>row["titre"]</code>). Sans l'option, la ligne d'en-tête est traitée comme une ligne de DONNÉES et l'accès se fait par index (<code>row[0]</code>).</div>
+    </details>
+    <details>
+      <summary>Écris de mémoire les 3 lignes qui consomment une API JSON.</summary>
+      <div class="ans"><code>require "json"</code> et <code>require "open-uri"</code>, puis :<br><code>data = JSON.parse(URI.open(url).read, symbolize_names: true)</code><br>Télécharger (<code>URI.open</code>), lire (<code>.read</code>), parser (<code>JSON.parse</code>).</div>
+    </details>
+    <details>
+      <summary>Pourquoi préférer une API au scraping quand les deux sont possibles ?</summary>
+      <div class="ans">L'API est un CONTRAT : données structurées, stables, prévues pour les machines. Le scraping dépend de la structure HTML d'une page pensée pour les humains : elle peut changer sans préavis et casser les sélecteurs.</div>
+    </details>
+    <details>
+      <summary><code>file.write(mon_hash)</code> : qu'est-ce qui finit réellement dans le fichier ?</summary>
+      <div class="ans">La représentation <code>to_s</code> du Hash (du pseudo-Ruby du type <code>{"a"=&gt;1}</code>), PAS du JSON valide. Il faut sérialiser explicitement : <code>file.write(JSON.generate(mon_hash))</code>.</div>
+    </details>
+  </section>
+
+  <footer>Fiche généraliste (pas de session de chat ce jour) · À réviser en priorité : l'aller-retour parsing/storing, clés String vs Symbol après <code>JSON.parse</code>, API d'abord scraping ensuite · Livecode du jour : Films Scraper (voir <code>livecode_with_comments/week2</code>).</footer>
+
+</div>
+</body>
+</html>
