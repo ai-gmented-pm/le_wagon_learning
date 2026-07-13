@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Wagon Learning — révisions</title>
+<style>
+  :root{
+    --paper:#fdfcf7; --ink:#1f2430; --muted:#6b7280; --line:#e7e3d6;
+    --accent:#c0562b; --blue:#2563a8; --green:#2f7d54; --purple:#7a5cc0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:20px 14px;background:#eceae0;color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    line-height:1.5}
+  .wrap{max-width:640px;margin:0 auto}
+  header{background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);padding:20px 22px;margin-bottom:16px;
+    border-top:4px solid var(--accent)}
+  .kicker{letter-spacing:.14em;text-transform:uppercase;font-size:11px;
+    color:var(--accent);font-weight:700}
+  h1{margin:4px 0 4px;font-size:22px}
+  header p{margin:0;color:var(--muted);font-size:14px}
+  section{background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 6px 20px rgba(0,0,0,.06);padding:16px 20px;margin-bottom:14px}
+  h2{font-size:14px;margin:0 0 4px;padding-left:10px;border-left:5px solid var(--accent)}
+  .s-flash h2{border-color:var(--purple);color:var(--purple)}
+  .s-recap h2{border-color:var(--blue);color:var(--blue)}
+  .s-cheat h2{border-color:var(--green);color:var(--green)}
+  .hint{color:var(--muted);font-size:12.5px;margin:0 0 10px;padding-left:15px}
+  h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:12px 0 4px;padding-left:15px}
+  ul{list-style:none;margin:0;padding:0}
+  li{margin:6px 0}
+  a.item{display:block;padding:11px 14px;background:#fff;border:1px solid var(--line);
+    border-radius:8px;color:var(--ink);text-decoration:none;font-size:15px}
+  a.item:active{background:#f4f1e8}
+  a.item b{color:var(--accent)}
+  footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Le Wagon · Camp 2319</div>
+    <h1>Mes révisions</h1>
+    <p>Flashcards, recaps et cheatsheets, directement dans le navigateur (mobile compris). Une fois une page chargée, elle fonctionne hors ligne.</p>
+  </header>
+
+  <section class="s-flash">
+    <h2>🃏 Flashcards (rappel actif)</h2>
+    <p class="hint">35 cartes par jour : réponds de tête, retourne la carte, auto-évalue-toi.</p>
+    <h3>Semaine 2</h3>
+    <ul>
+      <li><a class="item" href="content/flashcards/week2/w2_day1_flashcard.html"><b>J1</b> · Regular Expressions</a></li>
+      <li><a class="item" href="content/flashcards/week2/w2_day2_flashcard.html"><b>J2</b> · Parsing</a></li>
+    </ul>
+    <h3>Semaine 1</h3>
+    <ul>
+      <li><a class="item" href="content/flashcards/week1/w1_day1_flashcard.html"><b>J1</b> · Programming Basics</a></li>
+      <li><a class="item" href="content/flashcards/week1/w1_day2_flashcard.html"><b>J2</b> · Strings &amp; Dates</a></li>
+      <li><a class="item" href="content/flashcards/week1/w1_day3_flashcard.html"><b>J3</b> · Flow &amp; Conditionals</a></li>
+      <li><a class="item" href="content/flashcards/week1/w1_day4_flashcard.html"><b>J4</b> · Iterators &amp; Blocks</a></li>
+      <li><a class="item" href="content/flashcards/week1/w1_day5_flashcard.html"><b>J5</b> · Hash &amp; Symbols</a></li>
+    </ul>
+  </section>
+
+  <section class="s-recap">
+    <h2>📇 Recaps (fiches à lire)</h2>
+    <p class="hint">La synthèse du jour : questions clés, concepts, pièges, auto-test.</p>
+    <h3>Semaine 2</h3>
+    <ul>
+      <li><a class="item" href="content/recaps/week2/week2_recap_day1.html"><b>J1</b> · Regular Expressions</a></li>
+      <li><a class="item" href="content/recaps/week2/week2_recap_day2.html"><b>J2</b> · Parsing</a></li>
+    </ul>
+    <h3>Semaine 1</h3>
+    <ul>
+      <li><a class="item" href="content/recaps/week1/week1_recap_day1.html"><b>J1</b> · Programming Basics</a></li>
+      <li><a class="item" href="content/recaps/week1/week1_recap_day2.html"><b>J2</b> · Strings &amp; Dates</a></li>
+      <li><a class="item" href="content/recaps/week1/week1_recap_day3.html"><b>J3</b> · Flow &amp; Conditionals</a></li>
+      <li><a class="item" href="content/recaps/week1/week1_recap_day4.html"><b>J4</b> · Iterators &amp; Blocks</a></li>
+      <li><a class="item" href="content/recaps/week1/week1_recap_day5.html"><b>J5</b> · Hash &amp; Symbols</a></li>
+      <li><a class="item" href="content/recaps/week1/recap_week1.html"><b>Hebdo</b> · Synthèse de la semaine 1</a></li>
+    </ul>
+  </section>
+
+  <section class="s-cheat">
+    <h2>📜 Cheatsheets</h2>
+    <p class="hint">L'essentiel de la semaine sur une page, imprimable.</p>
+    <ul>
+      <li><a class="item" href="content/cheatsheets/week1/w1_ruby_basics_cheatsheet.html"><b>S1</b> · Ruby Basics</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    Les livecodes commentés (fichiers .rb) se lisent sur <a href="https://github.com/ai-gmented-pm/le_wagon_learning/tree/main/content/livecode_with_comments">GitHub</a>.<br>
+    © Romain Nicod / AI-gmented.pm — usage personnel et pédagogique.
+  </footer>
+
+</div>
+</body>
+</html>

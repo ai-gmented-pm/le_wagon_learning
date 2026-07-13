@@ -2,6 +2,8 @@
 
 AI-augmented autonomous learning backbone for Le Wagon's **AI Software Development** bootcamp — 3 Claude skills (coach, daily recap, flashcards) + the revision content they generate.
 
+📱 **Réviser en ligne (mobile ok) / Study online:** **https://ai-gmented-pm.github.io/le_wagon_learning/** — flashcards, recaps et cheatsheets interactifs dans le navigateur.
+
 - 🇫🇷 **[Lire en français → Readme_FR.md](Readme_FR.md)**
 - 🇬🇧 **[Read in English → Readme_EN.md](Readme_EN.md)**
 

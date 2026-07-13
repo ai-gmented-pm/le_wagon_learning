@@ -1,5 +1,13 @@
 # Release notes
 
+## v1.4.0 — 13 juillet 2026
+
+**Nouveau : le site de révision mobile (GitHub Pages)**
+
+- Le contenu HTML est désormais servi comme un vrai site : **https://ai-gmented-pm.github.io/le_wagon_learning/** — flashcards, recaps et cheatsheets s'ouvrent interactifs dans le navigateur, y compris sur téléphone (GitHub affichait le code source des fichiers, pas leur rendu).
+- `index.html` : page d'accueil mobile qui liste tout le contenu par type et par semaine.
+- Une fois une page chargée, elle fonctionne hors ligne (fichiers autonomes, aucune dépendance).
+
 ## v1.3.0 — 13 juillet 2026
 
 **Nouveau : les cheatsheets (`content/cheatsheets/`)**
